@@ -1,3 +1,39 @@
 <resources>
-    <string name="app_name">SmartMirrorModuleCustomizationApp</string>
+    <string name="app_name">Your Smart Mirror</string>
+    <string name="password">Password</string>
+    <string name="register">Register</string>
+    <string name="log_in">Log In</string>
+    <string name="username">Username</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="one_step_left">Just one step left!</string>
+    <string name="go_to_mirror">Username, just one step left! \n Please go to the smart mirror camera and take 5 photos of your face.</string>
+    <string name="take_photo">Take photo</string>
+    <string name="progress">Progress</string>
+    <string name="cancel">Cancel</string>
+    <string name="pos11">Pos11</string>
+    <string name="pos12">Pos12</string>
+    <string name="pos13">Pos13</string>
+    <string name="pos21">Pos21</string>
+    <string name="pos22">Pos22</string>
+    <string name="pos23">Pos23</string>
+    <string name="pos31">Pos31</string>
+    <string name="pos32">Pos32</string>
+    <string name="pos33">Pos33</string>
+    <string name="welcome_username">Welcome, Username!</string>
+    <string name="log_out">Log out</string>
+    <string name="plussign">PlusSign</string>
+    <string name="configuration_name">Configuration Name</string>
+    <string name="value">Value</string>
+    <string name="module">Module</string>
+    <string name="update">Update</string>
+    <string name="remove">Remove</string>
+    <string name="back">Back</string>
+    <string name="cameraicon">CameraIcon</string>
+
+    <string-array name="moduleNames">
+        <item>Module1</item>
+        <item>Module2</item>
+        <item>Module3</item>
+        <item>Module4</item>
+    </string-array>
 </resources>
