@@ -6,22 +6,52 @@
     android:layout_height="match_parent"
     tools:context=".UserActivity">
 
-    <GridLayout
-        android:id="@+id/mainGrid"
-        android:layout_width="400dp"
-        android:layout_height="400dp"
+
+    <!-- Pos 1 -->
+
+    <TextView
+        android:id="@+id/welcomeText_user"
+        android:layout_width="159dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="163dp"
-        android:layout_marginEnd="6dp"
-        android:alignmentMode="alignMargins"
-        android:columnCount="3"
-        android:columnOrderPreserved="false"
-        android:padding="14dp"
-        android:rowCount="3">
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="123dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="130dp"
+        android:text="@string/welcome_username"
+        android:textAlignment="center" />
 
-        <!-- Pos 11 -->
+    <Button
+        android:id="@+id/logoutBtn_user"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="25dp"
+        android:text="@string/log_out" />
+
+    <GridLayout
+        android:id="@+id/pos1Grid_user"
+        android:layout_width="400dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/welcomeText_user"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:alignmentMode="alignMargins"
+        android:columnCount="1"
+        android:columnOrderPreserved="false"
+        android:padding="0dp"
+        android:rowCount="1">
+
+        <!-- Pos 1 -->
 
         <androidx.cardview.widget.CardView
             android:layout_width="0dp"
@@ -39,20 +69,20 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal|center_vertical"
                 android:layout_margin="0dp"
-                android:orientation="vertical">
+                android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/pos11Text_user"
+                    android:id="@+id/pos1Text_user"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/pos11"
+                    android:text="@string/pos1"
                     android:textAlignment="center"
                     android:textColor="@android:color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <ImageButton
-                    android:id="@+id/pos11Btn_user"
+                    android:id="@+id/pos1Btn_user"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
@@ -65,93 +95,29 @@
 
         </androidx.cardview.widget.CardView>
 
-        <!-- Pos 12 -->
+    </GridLayout>
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_rowWeight="1"
-            android:layout_columnWeight="1"
-            android:layout_marginLeft="0dp"
-            android:layout_marginRight="0dp"
-            android:layout_marginBottom="0dp"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="8dp">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal|center_vertical"
-                android:layout_margin="0dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/pos12Text_user"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/pos12"
-                    android:textAlignment="center"
-                    android:textColor="@android:color/black"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <ImageButton
-                    android:id="@+id/pos12Btn_user"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:backgroundTint="#FFFFFF"
-                    android:src="@android:drawable/ic_menu_edit"
-                    android:contentDescription="@string/plussign" />
+    <!-- Pos 1 End-->
 
 
-            </LinearLayout>
+    <!-- Pos 2 -->
 
-        </androidx.cardview.widget.CardView>
-
-        <!-- Pos 13 -->
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_rowWeight="1"
-            android:layout_columnWeight="1"
-            android:layout_marginLeft="0dp"
-            android:layout_marginRight="0dp"
-            android:layout_marginBottom="0dp"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="8dp">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal|center_vertical"
-                android:layout_margin="0dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/pos13Text_user"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/pos13"
-                    android:textAlignment="center"
-                    android:textColor="@android:color/black"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <ImageButton
-                    android:id="@+id/pos13Btn_user"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:backgroundTint="#FFFFFF"
-                    android:src="@android:drawable/ic_menu_edit"
-                    android:contentDescription="@string/plussign" />
-
-
-            </LinearLayout>
-
-        </androidx.cardview.widget.CardView>
+    <GridLayout
+        android:id="@+id/pos2Grid_user"
+        android:layout_width="400dp"
+        android:layout_height="100dp"
+        android:layout_below="@+id/pos1Grid_user"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:alignmentMode="alignMargins"
+        android:columnCount="3"
+        android:columnOrderPreserved="false"
+        android:padding="0dp"
+        android:rowCount="1">
 
         <!-- Pos 21 -->
 
@@ -160,8 +126,8 @@
             android:layout_height="0dp"
             android:layout_rowWeight="1"
             android:layout_columnWeight="1"
-            android:layout_marginLeft="0dp"
-            android:layout_marginRight="0dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="5dp"
             android:layout_marginBottom="0dp"
             app:cardCornerRadius="8dp"
             app:cardElevation="8dp">
@@ -189,8 +155,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:backgroundTint="#FFFFFF"
-                    android:src="@android:drawable/ic_menu_edit"
-                    android:contentDescription="@string/plussign" />
+                    android:contentDescription="@string/plussign"
+                    android:src="@android:drawable/ic_menu_edit" />
 
 
             </LinearLayout>
@@ -204,8 +170,8 @@
             android:layout_height="0dp"
             android:layout_rowWeight="1"
             android:layout_columnWeight="1"
-            android:layout_marginLeft="0dp"
-            android:layout_marginRight="0dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:layout_marginBottom="0dp"
             app:cardCornerRadius="8dp"
             app:cardElevation="8dp">
@@ -233,8 +199,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:backgroundTint="#FFFFFF"
-                    android:src="@android:drawable/ic_menu_edit"
-                    android:contentDescription="@string/plussign" />
+                    android:contentDescription="@string/plussign"
+                    android:src="@android:drawable/ic_menu_edit" />
 
 
             </LinearLayout>
@@ -248,8 +214,8 @@
             android:layout_height="0dp"
             android:layout_rowWeight="1"
             android:layout_columnWeight="1"
-            android:layout_marginLeft="0dp"
-            android:layout_marginRight="0dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="0dp"
             android:layout_marginBottom="0dp"
             app:cardCornerRadius="8dp"
             app:cardElevation="8dp">
@@ -277,140 +243,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:backgroundTint="#FFFFFF"
-                    android:src="@android:drawable/ic_menu_edit"
-                    android:contentDescription="@string/plussign" />
-
-
-            </LinearLayout>
-
-        </androidx.cardview.widget.CardView>
-
-        <!-- Pos 31 -->
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_rowWeight="1"
-            android:layout_columnWeight="1"
-            android:layout_marginLeft="0dp"
-            android:layout_marginRight="0dp"
-            android:layout_marginBottom="0dp"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="8dp">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal|center_vertical"
-                android:layout_margin="0dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/pos31Text_user"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/pos31"
-                    android:textAlignment="center"
-                    android:textColor="@android:color/black"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <ImageButton
-                    android:id="@+id/pos31Btn_user"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:backgroundTint="#FFFFFF"
-                    android:src="@android:drawable/ic_menu_edit"
-                    android:contentDescription="@string/plussign" />
-
-
-            </LinearLayout>
-
-        </androidx.cardview.widget.CardView>
-
-        <!-- Pos 32 -->
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_rowWeight="1"
-            android:layout_columnWeight="1"
-            android:layout_marginLeft="0dp"
-            android:layout_marginRight="0dp"
-            android:layout_marginBottom="0dp"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="8dp">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal|center_vertical"
-                android:layout_margin="0dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/pos32Text_user"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/pos32"
-                    android:textAlignment="center"
-                    android:textColor="@android:color/black"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <ImageButton
-                    android:id="@+id/pos32Btn_user"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:backgroundTint="#FFFFFF"
-                    android:src="@android:drawable/ic_menu_edit"
-                    android:contentDescription="@string/plussign" />
-
-
-            </LinearLayout>
-
-        </androidx.cardview.widget.CardView>
-
-        <!-- Pos 33 -->
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_rowWeight="1"
-            android:layout_columnWeight="1"
-            android:layout_marginLeft="0dp"
-            android:layout_marginRight="0dp"
-            android:layout_marginBottom="0dp"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="8dp">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal|center_vertical"
-                android:layout_margin="0dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/pos33Text_user"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/pos33"
-                    android:textAlignment="center"
-                    android:textColor="@android:color/black"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <ImageButton
-                    android:id="@+id/pos33Btn_user"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:backgroundTint="#FFFFFF"
-                    android:src="@android:drawable/ic_menu_edit"
-                    android:contentDescription="@string/plussign" />
+                    android:contentDescription="@string/plussign"
+                    android:src="@android:drawable/ic_menu_edit" />
 
 
             </LinearLayout>
@@ -420,25 +254,435 @@
 
     </GridLayout>
 
-    <TextView
-        android:id="@+id/welcomeText_user"
-        android:layout_width="321dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+    <!-- Pos2 End -->
+
+
+    <!-- Pos 3 -->
+
+    <GridLayout
+        android:id="@+id/pos3Grid_user"
+        android:layout_width="400dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/pos2Grid_user"
+        android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="72dp"
-        android:layout_marginEnd="47dp"
-        android:text="@string/welcome_username"
-        android:textAlignment="center" />
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:alignmentMode="alignMargins"
+        android:columnCount="1"
+        android:columnOrderPreserved="false"
+        android:padding="0dp"
+        android:rowCount="1">
 
-    <Button
-        android:id="@+id/logoutBtn_user"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        <!-- Pos 3 -->
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginBottom="0dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="8dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:layout_margin="0dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/pos3Text_user"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/pos3"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <ImageButton
+                    android:id="@+id/pos3Btn_user"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:backgroundTint="#FFFFFF"
+                    android:contentDescription="@string/plussign"
+                    android:src="@android:drawable/ic_menu_edit" />
+
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </GridLayout>
+
+    <!-- Pos 3 End-->
+
+
+    <!-- Pos 4 -->
+
+    <GridLayout
+        android:id="@+id/pos4Grid_user"
+        android:layout_width="400dp"
+        android:layout_height="100dp"
+        android:layout_below="@+id/pos3Grid_user"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="59dp"
-        android:text="@string/log_out" />
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:alignmentMode="alignMargins"
+        android:columnCount="1"
+        android:columnOrderPreserved="false"
+        android:padding="0dp"
+        android:rowCount="1">
+
+        <!-- Pos 4 -->
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginBottom="0dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="8dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:layout_margin="0dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/pos4Text_user"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/pos4"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <ImageButton
+                    android:id="@+id/pos4Btn_user"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:backgroundTint="#FFFFFF"
+                    android:contentDescription="@string/plussign"
+                    android:src="@android:drawable/ic_menu_edit" />
+
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </GridLayout>
+
+    <!-- Pos 4 End-->
+
+
+    <!-- Pos 5 -->
+
+    <GridLayout
+        android:id="@+id/pos5Grid_user"
+        android:layout_width="400dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/pos4Grid_user"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:alignmentMode="alignMargins"
+        android:columnCount="1"
+        android:columnOrderPreserved="false"
+        android:padding="0dp"
+        android:rowCount="1">
+
+        <!-- Pos 5 -->
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginBottom="0dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="8dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:layout_margin="0dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/pos5Text_user"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/pos5"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <ImageButton
+                    android:id="@+id/pos5Btn_user"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:backgroundTint="#FFFFFF"
+                    android:contentDescription="@string/plussign"
+                    android:src="@android:drawable/ic_menu_edit" />
+
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </GridLayout>
+
+    <!-- Pos 5 End-->
+
+
+    <!-- Pos 6 -->
+
+    <GridLayout
+        android:id="@+id/pos6Grid_user"
+        android:layout_width="400dp"
+        android:layout_height="100dp"
+        android:layout_below="@+id/pos5Grid_user"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:alignmentMode="alignMargins"
+        android:columnCount="3"
+        android:columnOrderPreserved="false"
+        android:padding="0dp"
+        android:rowCount="1">
+
+        <!-- Pos 61 -->
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="0dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="8dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:layout_margin="0dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/pos61Text_user"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/pos61"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <ImageButton
+                    android:id="@+id/pos61Btn_user"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:backgroundTint="#FFFFFF"
+                    android:contentDescription="@string/plussign"
+                    android:src="@android:drawable/ic_menu_edit" />
+
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- Pos 62 -->
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="0dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="8dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:layout_margin="0dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/pos62Text_user"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/pos62"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <ImageButton
+                    android:id="@+id/pos62Btn_user"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:backgroundTint="#FFFFFF"
+                    android:contentDescription="@string/plussign"
+                    android:src="@android:drawable/ic_menu_edit" />
+
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- Pos 63 -->
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="0dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="8dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:layout_margin="0dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/pos63Text_user"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/pos63"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <ImageButton
+                    android:id="@+id/pos63Btn_user"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:backgroundTint="#FFFFFF"
+                    android:contentDescription="@string/plussign"
+                    android:src="@android:drawable/ic_menu_edit" />
+
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+
+    </GridLayout>
+
+    <!-- Pos6 End -->
+
+
+    <!-- Pos 7 -->
+
+    <GridLayout
+        android:id="@+id/pos7Grid_user"
+        android:layout_width="400dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/pos6Grid_user"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:alignmentMode="alignMargins"
+        android:columnCount="1"
+        android:columnOrderPreserved="false"
+        android:padding="0dp"
+        android:rowCount="1">
+
+        <!-- Pos 7 -->
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginBottom="0dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="8dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:layout_margin="0dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/pos7Text_user"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/pos7"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <ImageButton
+                    android:id="@+id/pos7Btn_user"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:backgroundTint="#FFFFFF"
+                    android:contentDescription="@string/plussign"
+                    android:src="@android:drawable/ic_menu_edit" />
+
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </GridLayout>
+
+    <!-- Pos 7 End-->
 
 </RelativeLayout>

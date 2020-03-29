@@ -25,7 +25,7 @@ public class UserActivity extends AppCompatActivity {
             }
         });
 
-        int buttonNumArr[] = {11, 12, 13, 21, 22, 23, 31, 32, 33};
+        int buttonNumArr[] = {1, 21, 22, 23, 3, 4, 5, 61, 62, 63, 7};
         for (int buttonNum : buttonNumArr) {
             String buttonName = "pos" + buttonNum + "Btn_user";
             ImageButton addModuleBtn = (ImageButton) findViewById(getResources().getIdentifier(buttonName, "id", this.getPackageName()));
