@@ -33,9 +33,8 @@
     <string name="cameraicon">CameraIcon</string>
 
     <string-array name="moduleNames">
-        <item>Module1</item>
-        <item>Module2</item>
-        <item>Module3</item>
-        <item>Module4</item>
+        <item>Youtube</item>
+        <item>Stock</item>
+        <item>COVID-19</item>
     </string-array>
 </resources>
