@@ -16,16 +16,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/moduleText_module" />
 
-    <ListView
-        android:id="@+id/moduleConfigList_module"
-        android:layout_width="wrap_content"
-        android:layout_height="400dp"
-        android:layout_marginTop="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/moduleSpinner_module" />
-
     <TextView
         android:id="@+id/moduleText_module"
         android:layout_width="wrap_content"
@@ -36,13 +26,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/moduleConfigList_module"
+        android:layout_width="388dp"
+        android:layout_height="381dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/moduleSpinner_module" />
+
     <Button
         android:id="@+id/updateBtn_module"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="16dp"
         android:text="@string/update"
         app:layout_constraintEnd_toStartOf="@+id/backBtn_module"
+        app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toEndOf="@+id/removeBtn_module"
         app:layout_constraintTop_toBottomOf="@+id/moduleConfigList_module" />
 
@@ -51,7 +51,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="16dp"
         android:text="@string/remove"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/moduleConfigList_module" />
@@ -60,9 +60,10 @@
         android:id="@+id/backBtn_module"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="32dp"
         android:text="@string/back"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/moduleConfigList_module" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

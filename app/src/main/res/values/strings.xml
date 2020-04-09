@@ -31,6 +31,13 @@
     <string name="remove">Remove</string>
     <string name="back">Back</string>
     <string name="cameraicon">CameraIcon</string>
+    <string name="JDBC_DRIVER">com.mysql.jdbc.Driver</string>
+    <string name="DATABASE_URL">35.229.17.244:3306</string>
+    <string name="DATABASE_NAME">smartmirrorschema</string>
+    <string name="DATABASE_USERNAME">joezie</string>
+    <string name="DATABASE_PASSWORD">yigemima</string>
+    <string name="JDBC_PREFIX">jdbc:mysql://</string>
+    <string name="refer_to_youtube">refer to YouTube</string>
 
     <string-array name="moduleNames">
         <item>Youtube</item>
