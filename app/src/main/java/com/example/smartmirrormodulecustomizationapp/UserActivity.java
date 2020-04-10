@@ -50,16 +50,17 @@ public class UserActivity extends AppCompatActivity {
 
         // set module edit buttons action
         int[] buttonNumArr = {1, 21, 22, 23, 3, 4, 5, 61, 62, 63, 7};
-        for (int buttonNum : buttonNumArr) {
+        for (final int buttonNum : buttonNumArr) {
             String buttonName = "pos" + buttonNum + "Btn_user";
             ImageButton addModuleBtn = findViewById(getResources().getIdentifier(buttonName, "id", this.getPackageName()));
             addModuleBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // pass username to AddModuleActivity
+                    // pass username and button position to AddModuleActivity
 
                     Intent startIntent = new Intent(getApplicationContext(), AddModuleActivity.class);
                     startIntent.putExtra(getResources().getString(R.string.username), username);
+                    startIntent.putExtra(getResources().getString(R.string.pos), buttonNum);
                     startActivity(startIntent);
                 }
             });

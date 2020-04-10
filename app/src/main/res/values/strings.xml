@@ -10,6 +10,8 @@
     <string name="take_photo">Take photo</string>
     <string name="progress">Progress</string>
     <string name="cancel">Cancel</string>
+    <string name="pos">Pos</string>
+    <string name="position">position</string>
     <string name="pos1">Pos1</string>
     <string name="pos21">Pos21</string>
     <string name="pos22">Pos22</string>
@@ -29,6 +31,7 @@
     <string name="module">Module</string>
     <string name="update">Update</string>
     <string name="remove">Remove</string>
+    <string name="add">Add</string>
     <string name="back">Back</string>
     <string name="cameraicon">CameraIcon</string>
     <string name="JDBC_DRIVER">com.mysql.jdbc.Driver</string>
@@ -38,10 +41,17 @@
     <string name="DATABASE_PASSWORD">yigemima</string>
     <string name="JDBC_PREFIX">jdbc:mysql://</string>
     <string name="refer_to_youtube">refer to YouTube</string>
+    <string name="user_module_table">smartmirrorschema.user_module_table</string>
 
     <string-array name="moduleNames">
-        <item>Youtube</item>
-        <item>Stock</item>
-        <item>COVID-19</item>
+        <item>youtube_module</item>
+        <item>stock_module</item>
+        <item>covid_module</item>
+    </string-array>
+
+    <string-array name="tableNames">
+        <item>smartmirrorschema.youtube_module_config_table</item>
+        <item>smartmirrorschema.stock_module_config_table</item>
+        <item>smartmirrorschema.covid_module_config_table</item>
     </string-array>
 </resources>
