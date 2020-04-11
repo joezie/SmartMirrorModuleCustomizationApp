@@ -42,9 +42,6 @@ public class AddModuleActivity extends AppCompatActivity {
     // stores status of each module (module name, status)
     private final Map<String, Boolean> moduleStatusMap = new LinkedHashMap<>();
 
-    // mapping between module name and database table name (module name, table name)
-    private final Map<String, String> moduleTableMap = new LinkedHashMap<>();
-
     /**
      *  Set layout, username, and actions of spinner, config list, and buttons
      *
@@ -52,21 +49,34 @@ public class AddModuleActivity extends AppCompatActivity {
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
 
         // set layout
         setContentView(R.layout.activity_add_module);
 
-        // set username
-        if (getIntent().hasExtra(getResources().getString(R.string.username)) &&
-                getIntent().hasExtra(getResources().getString(R.string.pos))) {
-            username = Objects.requireNonNull(getIntent().getExtras())
-                    .getString(getResources().getString(R.string.username));
-            position = getIntent().getExtras().getInt(getResources().getString(R.string.pos));
+        // set position
+        if (getIntent().hasExtra(getResources().getString(R.string.pos))) {
+
+            position = Objects.requireNonNull(getIntent()
+                    .getExtras())
+                    .getInt(getResources().getString(R.string.pos));
+
+        } else {
+
+            throw new IllegalStateException("Button position information missing");
+
         }
 
-        // set moduleTableMap
-        initModuleTableMap();
+        // set username
+        username = getSharedPreferences(getResources()
+                .getString(R.string.user_preference), MODE_PRIVATE)
+                .getString(getResources().getString(R.string.username), null);
+        if (username == null) {
+
+            throw new IllegalStateException("Username information missing");
+
+        }
 
         // set moduleConfigMap
         setModuleConfigMapAndModuleStatusMap();
@@ -94,10 +104,12 @@ public class AddModuleActivity extends AppCompatActivity {
 
                 final String selectedModule = moduleSpinner.getSelectedItem().toString();
                 final RecyclerView configListView = findViewById(R.id.moduleConfigList_module);
-
+                final Button removeBtn = findViewById(R.id.removeBtn_module);
+                final Button updateBtn = findViewById(R.id.updateBtn_module);
+                final Button addBtn = findViewById(R.id.addBtn_module);
 
                 // check if this module is enabled by this user
-                Boolean moduleStatus = moduleStatusMap.get(selectedModule);
+                final Boolean moduleStatus = moduleStatusMap.get(selectedModule);
                 if (moduleStatus != null && moduleStatus) {
 
                     final Map<String, Object> configMap = moduleConfigMap.get(selectedModule);
@@ -105,13 +117,23 @@ public class AddModuleActivity extends AppCompatActivity {
                     if (configMap != null && configMap.size() > 0) {
 
                         configListView.setAdapter(new HeteroItemAdapter(configMap));
+
+                        // show remove and update buttons and hide add button
+                        removeBtn.setVisibility(View.VISIBLE);
+                        updateBtn.setVisibility(View.VISIBLE);
+                        addBtn.setVisibility(View.GONE);
+
                         return;
 
                     }
 
                 }
 
-                // display empty config list
+                // show add button and hide remove and update buttons, and display
+                // empty config list if this module is not enabled
+                removeBtn.setVisibility(View.GONE);
+                updateBtn.setVisibility(View.GONE);
+                addBtn.setVisibility(View.VISIBLE);
                 configListView.setAdapter(new HeteroItemAdapter(
                         new LinkedHashMap<String, Object>()
                 ));
@@ -119,7 +141,7 @@ public class AddModuleActivity extends AppCompatActivity {
             }
 
             /**
-             * Display empty config list when nothing is selected
+             * Display empty config list and hide buttons except for back when nothing is selected
              *
              * @param parent Dummy argument
              */
@@ -131,245 +153,111 @@ public class AddModuleActivity extends AppCompatActivity {
                         new LinkedHashMap<String, Object>()
                 ));
 
+                final Button removeBtn = findViewById(R.id.removeBtn_module);
+                final Button updateBtn = findViewById(R.id.updateBtn_module);
+                final Button addBtn = findViewById(R.id.addBtn_module);
+                removeBtn.setVisibility(View.GONE);
+                updateBtn.setVisibility(View.GONE);
+                addBtn.setVisibility(View.GONE);
+
             }
 
         });
 
+        // set default module if available
+        if (getIntent().hasExtra(getResources().getString(R.string.default_module))) {
+
+            final String defaultModuleName = Objects.requireNonNull(getIntent()
+                    .getExtras())
+                    .getString(getResources().getString(R.string.default_module));
+            final int defaultModulePos = moduleArrayAdapter.getPosition(defaultModuleName);
+            moduleSpinner.setSelection(defaultModulePos);
+
+        }
+
         // set layout manager of config list
         RecyclerView configListView = findViewById(R.id.moduleConfigList_module);
-/*
-        // FOR TEST ONLY BEGIN
-        itemMap.put("A Boolean", true);
-        itemMap.put("An Integer", 233);
-        itemMap.put("A String", "skr~");
-        // FOR TEST ONLY END
-*/
-        // configListView.setAdapter(new HeteroItemAdapter(itemMap));
         configListView.setLayoutManager(new LinearLayoutManager(this));
-
-
 
         // set buttons action
         Button backBtn = findViewById(R.id.backBtn_module);
         backBtn.setOnClickListener(new View.OnClickListener() {
+
+            /**
+             * Jump back to UserActivity page
+             *
+             * @param v Dunmmy argument
+             */
             @Override
             public void onClick(View v) {
                 Intent startIntent = new Intent(getApplicationContext(), UserActivity.class);
                 startActivity(startIntent);
             }
+
         });
 
+        // TODO: set actions for add, remove, and update buttons
 
+        Button addBtn = findViewById(R.id.addBtn_module);
+        addBtn.setOnClickListener(new View.OnClickListener() {
+
+            /**
+             * TODO: Generate a default item of this module for the user in the database;
+             * reload the page with this module as default module
+             *
+             * @param v Dunmmy argument
+             */
+            @Override
+            public void onClick(View v) {
+
+                final String selectedModule = moduleSpinner.getSelectedItem().toString();
+                addNewModule(selectedModule);
+
+            }
+
+        });
 
     }
 
     /**
-     * Set moduleTableMap
-     */
-    private void initModuleTableMap() {
-        final String[] moduleNames = getResources().getStringArray(R.array.moduleNames);
-        final String[] tableNames = getResources().getStringArray(R.array.tableNames);
-        for (int i = 0; i < moduleNames.length; ++i)
-            moduleTableMap.put(moduleNames[i], tableNames[i]);
-    }
-
-    /**
-     * Run a thread to query module configuration data from database and set moduleConfigMap
+     * Run a thread to query module configuration data from database
+     * to set module config and status maps
      */
     private void setModuleConfigMapAndModuleStatusMap() {
-        GetData retrieveData = new GetData();
-        Thread thread = new Thread(retrieveData);
+
+        DatabaseHandler handler = new DatabaseHandler(
+                this, getResources().getString(R.string.read),
+                username, position, moduleConfigMap, moduleStatusMap);
+        Thread thread = new Thread(handler);
         thread.start();
         try {
             thread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
     }
 
+    /**
+     * Run a thread to generate a default item of this module for the user in the database;
+     * reload the page with this module as default module to set module config and status maps
+     *
+     * @param moduleName the new module to be added to database
+     */
+    private void addNewModule(final String moduleName) {
 
-    private class GetData implements Runnable {
-
-        // Prepare for database connection
-        final String db_driver = getResources().getString(R.string.JDBC_DRIVER);
-        final String db_url = getResources().getString(R.string.JDBC_PREFIX) +
-                getResources().getString(R.string.DATABASE_URL) + "/" +
-                getResources().getString(R.string.DATABASE_NAME);
-        final String db_username = getResources().getString(R.string.DATABASE_USERNAME);
-        final String db_password = getResources().getString(R.string.DATABASE_PASSWORD);
-
-        /**
-         *  Query configuration data of each module and store in moduleConfigMap;
-         *  query enabling status of each module and store in moduleStatusMap
-         */
-        @Override
-        public void run() {
-
-            Connection conn = null;
-            Statement stmt = null;
-
-            try {
-
-                // conduct query to database
-                Class.forName(db_driver);
-                conn = DriverManager.getConnection(db_url, db_username, db_password);
-                stmt = conn.createStatement();
-
-
-                // query enabling status of each module and store in moduleStatusMap
-                final String userModuleTable = getResources()
-                        .getString(R.string.user_module_table);
-                @SuppressLint("DefaultLocale")
-                final String userModuleQuery = String.format(
-                        "SELECT * FROM %s WHERE username=\"%s\"", userModuleTable, username
-                );
-                final ResultSet userModuleResult = stmt.executeQuery(userModuleQuery);
-                final ResultSetMetaData userModuleQueryMeta = userModuleResult.getMetaData();
-
-                // store status of each module
-                if (userModuleResult.next()) {
-
-                    final int columnCount = userModuleQueryMeta.getColumnCount();
-
-                    // skip column 1 (username) & 2 (password)
-                    for (int colNum = 3; colNum <= columnCount; ++colNum) {
-
-                        // get column name and configuration value
-                        final String colName = userModuleQueryMeta.getColumnName(colNum);
-                        final Boolean enabled = userModuleResult.getBoolean(colNum);
-
-                        // put (module name, status) in moduleStatusMap
-                        moduleStatusMap.put(colName, enabled);
-
-                    } // END of inner for block
-
-                } else {
-
-                    throw new IllegalStateException(
-                            "User " + username + " unregistered in database");
-
-                } // END of if-else block
-
-                // close result set
-                userModuleResult.close();
-
-
-                // query configuration data for each module and store in moduleConfigMap
-                for (final Map.Entry<String, String> moduleTableEntry
-                        : moduleTableMap.entrySet()) {
-
-                    final String moduleName = moduleTableEntry.getKey();
-                    final String tableName = moduleTableEntry.getValue();
-
-                    // firstly check if this module is enabled
-                    Boolean moduleStatus = moduleStatusMap.get(moduleName);
-                    if (moduleStatus == null || !moduleStatus)
-                        continue;
-
-                    @SuppressLint("DefaultLocale")
-                    final String query = String.format(
-                            "SELECT * FROM %s WHERE username=\"%s\"", tableName, username
-                    );
-                    final ResultSet rs = stmt.executeQuery(query);
-                    final ResultSetMetaData rsMata = rs.getMetaData();
-
-                    // store data from each column
-                    if (rs.next()) {
-
-                        // check if this module is in this position
-                        final int modulePos = rs.getInt(getResources().getString(R.string.position));
-                        if (modulePos != position) {
-                            // update this module as disabled status
-
-                            moduleStatusMap.put(moduleName, false);
-                            continue;
-                        }
-
-                        final int columnCount = rsMata.getColumnCount();
-                        final Map<String, Object> configMap = new LinkedHashMap<>();
-
-                        // skip column 1 (username) & 2 (position)
-                        for (int colNum = 3; colNum <= columnCount; ++colNum) {
-
-                            // get column name, column type, and configuration value
-                            final String colName = rsMata.getColumnName(colNum);
-                            final String colType = rsMata.getColumnTypeName(colNum);
-                            Object value;
-
-                            // get value according to column type and column name
-                            switch (colType) {
-                                // VARCHAR -> String
-                                case "VARCHAR":
-                                    value = rs.getString(colName);
-                                    break;
-
-                                // INT -> Integer
-                                case "INT":
-                                    value = rs.getInt(colName);
-                                    break;
-
-                                // TINYINT -> Boolean
-                                case "TINYINT":
-                                    value = rs.getBoolean(colName);
-                                    break;
-
-                                default:
-                                    throw new IllegalStateException(
-                                            "Unexpected Column Type: " + colType);
-                            }
-
-                            // put (colName, value) in configMap
-                            configMap.put(colName, value);
-
-                        } // END of inner for block
-
-                        moduleConfigMap.put(moduleName, configMap);
-
-                    } else {
-
-                        throw new IllegalStateException(
-                                "Module " + moduleName + " shown enabled in table "
-                                + userModuleTable + " but corresponding item of user "
-                                + username + " not found in table " + tableName);
-
-                    } // END of if-else block
-
-                    // close result set
-                    rs.close();
-
-                } // END of outer for block
-
-                // close connection to database
-                stmt.close();
-                conn.close();
-
-            } catch (Exception e) {
-
-                e.printStackTrace();
-
-            } finally {
-
-                // check again to close connection completely
-
-                try {
-                    if (stmt != null) {
-                        stmt.close();
-                    }
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-
-                try {
-                    if (conn != null) {
-                        conn.close();
-                    }
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-
-            }
+        DatabaseHandler handler = new DatabaseHandler(
+                this, getResources().getString(R.string.add),
+                username, position, moduleName);
+        Thread thread = new Thread(handler);
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
-    } // End of GetData
+    }
+
 
 } // END of AddModuleActivity

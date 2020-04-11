@@ -2,7 +2,9 @@ package com.example.smartmirrormodulecustomizationapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -32,17 +34,32 @@ public class UserActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user);
 
         // set username
-        if (getIntent().hasExtra(getResources().getString(R.string.username))) {
-            username = getIntent().getExtras().getString(getResources().getString(R.string.username));
-            TextView welcomeText = findViewById(R.id.welcomeText_user);
-            welcomeText.setText("Welcome, " + username + "!");
-        }
+        username = getSharedPreferences(getResources()
+                        .getString(R.string.user_preference), MODE_PRIVATE)
+                        .getString(getResources().getString(R.string.username),
+                                getResources().getString(R.string.undefined));
+
+        // set welcome text
+        TextView welcomeText = findViewById(R.id.welcomeText_user);
+        welcomeText.setText("Welcome, " + username + "!");
 
         // set logout button action
         Button logoutBtn = findViewById(R.id.logoutBtn_user);
         logoutBtn.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("ApplySharedPref")
             @Override
             public void onClick(View v) {
+                // TODO: real logout logic
+
+                // reset username in preference
+                getSharedPreferences(getResources()
+                        .getString(R.string.user_preference), MODE_PRIVATE)
+                        .edit()
+                        .putString(getResources().getString(R.string.username),
+                                getResources().getString(R.string.undefined))
+                        .commit();
+
+                // jump to login page
                 Intent startIntent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(startIntent);
             }
@@ -56,10 +73,10 @@ public class UserActivity extends AppCompatActivity {
             addModuleBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // pass username and button position to AddModuleActivity
+                    // pass button position to AddModuleActivity
 
                     Intent startIntent = new Intent(getApplicationContext(), AddModuleActivity.class);
-                    startIntent.putExtra(getResources().getString(R.string.username), username);
+                    // startIntent.putExtra(getResources().getString(R.string.username), username);
                     startIntent.putExtra(getResources().getString(R.string.pos), buttonNum);
                     startActivity(startIntent);
                 }
