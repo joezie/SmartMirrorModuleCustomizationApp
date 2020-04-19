@@ -36,6 +36,7 @@
     <string name="read_status">ReadStatus</string>
     <string name="read_pos_modules">ReadPosModules</string>
     <string name="read_range">ReadRange</string>
+    <string name="match_password">MatchPassword</string>
     <string name="back">Back</string>
     <string name="cameraicon">CameraIcon</string>
     <string name="JDBC_DRIVER">com.mysql.jdbc.Driver</string>
@@ -54,6 +55,14 @@
     <string name="min">min</string>
     <string name="max">max</string>
     <string name="EMPTY">EMPTY</string>
+    <string name="existence">existence</string>
+    <string name="matched">matched</string>
+    <string name="ERROR">ERROR</string>
+    <string name="OK">OK</string>
+    <string name="username_not_existed_message">The username not existed!</string>
+    <string name="username_not_existed_tag">USERNAME_NOT_EXISTED</string>
+    <string name="password_not_matched_message">Incorrect password!</string>
+    <string name="password_not_matched_tag">INCORRECT_PASSWORD</string>
 
 
     <string-array name="moduleNames">

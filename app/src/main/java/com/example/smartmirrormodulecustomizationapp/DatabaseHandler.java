@@ -28,8 +28,17 @@ class DatabaseHandler implements Runnable {
     // the selected module
     private String moduleName;
 
-    // button position passed from UserActivity
+    // button position
     private int position;
+
+    // user password to be matched
+    private String loginPassword;
+
+    // a flag indicating whether or not the login password is matched
+    private boolean passwordMatched;
+
+    // a flag indicating whether or not the username exists
+    private boolean usernameExisted;
     
     // preparation for database connection
     private final String db_driver;
@@ -42,6 +51,7 @@ class DatabaseHandler implements Runnable {
     private final String optype_readStatus;
     private final String optype_readPosModules;
     private final String optype_readRange;
+    private final String optype_matchPassword;
     private final String optype_update;
     private final String optype_add;
     private final String optype_remove;
@@ -95,6 +105,8 @@ class DatabaseHandler implements Runnable {
                 .getString(R.string.read_pos_modules);
         optype_readRange = parentActivity.getResources()
                 .getString(R.string.read_range);
+        optype_matchPassword = parentActivity.getResources()
+                .getString(R.string.match_password);
         optype_update = parentActivity.getResources().getString(R.string.update);
         optype_add = parentActivity.getResources().getString(R.string.add);
         optype_remove = parentActivity.getResources().getString(R.string.remove);
@@ -109,8 +121,13 @@ class DatabaseHandler implements Runnable {
         posModulesMap = null;
         rangeMap = null;
 
-        // set moduleName as undefined by default
+        // set moduleName and login password as undefined by default
         moduleName = parentActivity.getResources().getString(R.string.undefined);
+        loginPassword = parentActivity.getResources().getString(R.string.undefined);
+
+        // set password matched and username existed as false by default
+        passwordMatched = false;
+        usernameExisted = false;
 
     }
 
@@ -246,6 +263,29 @@ class DatabaseHandler implements Runnable {
     }
 
     /**
+     * Constructor used for match password operation
+     *
+     * @param parentActivity the parent activity that calls this database handler
+     * @param operationType  the database operation type
+     * @param username       the current user
+     * @param loginPassword  the login password to be matched
+     */
+    @SuppressLint("Assert")
+    DatabaseHandler(final AppCompatActivity parentActivity, final String operationType,
+                    final String username, final String loginPassword) {
+
+        // set common members and constant strings
+        this(parentActivity, operationType, username, -1);
+
+        // check operation type
+        assert operationType.equals(optype_matchPassword);
+
+        // set login password
+        this.loginPassword = loginPassword;
+
+    }
+
+    /**
      *  Query configuration data of each module and store in moduleConfigMap;
      *  query enabling status of each module and store in moduleStatusMap
      */
@@ -279,6 +319,8 @@ class DatabaseHandler implements Runnable {
                 updateModuleConfig(stmt);
             } else if (operationType.equals(optype_readRange)) {
                 readRanges(stmt);
+            } else if (operationType.equals(optype_matchPassword)) {
+                matchPassword(stmt);
             } else {
                 throw new IllegalStateException(
                         "Unsupported operation type " + operationType);
@@ -318,10 +360,10 @@ class DatabaseHandler implements Runnable {
     /**
      * Query enabling status of each module from database to set module status map
      *
-     * @param stmt       Used for database connection
-     * @throws Exception If cannot get data because user is not registered in this table
+     * @param stmt          Used for database connection
+     * @throws SQLException If cannot get data because user is not registered in this table
      */
-    private void readModuleStatus(final Statement stmt) throws Exception {
+    private void readModuleStatus(final Statement stmt) throws SQLException {
 
         final String userModuleTable = parentActivity.getResources()
                 .getString(R.string.user_module_table);
@@ -364,11 +406,11 @@ class DatabaseHandler implements Runnable {
     /**
      * Query configuration data for each module from database to set module config map
      *
-     * @param stmt       Used for database connection
-     * @throws Exception If module shown enabled in user module table but item of this
-     *                   user not found in corresponding table
+     * @param stmt          Used for database connection
+     * @throws SQLException If module shown enabled in user module table but item of this
+     *                      user not found in corresponding table
      */
-    private void readModuleConfig(final Statement stmt) throws Exception {
+    private void readModuleConfig(final Statement stmt) throws SQLException {
 
         for (final Map.Entry<String, String> moduleTableEntry
                 : moduleTableMap.entrySet()) {
@@ -463,10 +505,10 @@ class DatabaseHandler implements Runnable {
      * Set corresponding module as enabled in user module table and refresh parent activity
      * with selected module as default module on success
      *
-     * @param stmt       Used for database connection
-     * @throws Exception If cannot add an item to database for new module
+     * @param stmt          Used for database connection
+     * @throws SQLException If cannot add an item to database for new module
      */
-    private void addModule(final Statement stmt) throws Exception {
+    private void addModule(final Statement stmt) throws SQLException {
 
         final String moduleTable = moduleTableMap.get(moduleName);
         @SuppressLint("DefaultLocale") final String addModuleOperation =
@@ -512,10 +554,10 @@ class DatabaseHandler implements Runnable {
      * Set corresponding module as disabled in user module table and refresh parent activity
      * with selected module as default module on success
      *
-     * @param stmt       Used for database connection
-     * @throws Exception If cannot remove the item of the chosen module from database
+     * @param stmt          Used for database connection
+     * @throws SQLException If cannot remove the item of the chosen module from database
      */
-    private void removeModule(final Statement stmt) throws Exception {
+    private void removeModule(final Statement stmt) throws SQLException {
 
         final String moduleTable = moduleTableMap.get(moduleName);
         @SuppressLint("DefaultLocale") final String removeModuleOperation =
@@ -560,10 +602,10 @@ class DatabaseHandler implements Runnable {
      * Update config of the item in corresponding module table with given username and position;
      * Refresh parent activity with selected module as default module on success
      *
-     * @param stmt       Used for database connection
-     * @throws Exception If cannot update config of given module in database
+     * @param stmt          Used for database connection
+     * @throws SQLException If cannot update config of given module in database
      */
-    private void updateModuleConfig(final Statement stmt) throws Exception {
+    private void updateModuleConfig(final Statement stmt) throws SQLException {
 
         final StringBuilder configSetter = new StringBuilder();
         final Map<String, Object> configMap = moduleConfigMap.get(moduleName);
@@ -631,10 +673,10 @@ class DatabaseHandler implements Runnable {
     /**
      * Query integer type field range data from database to set range map
      *
-     * @param stmt       Used for database connection
-     * @throws Exception If range map is empty after database query
+     * @param stmt          Used for database connection
+     * @throws SQLException If range map is empty after database query
      */
-    private void readRanges(final Statement stmt) throws Exception {
+    private void readRanges(final Statement stmt) throws SQLException {
 
         final String rangeTable = parentActivity
                 .getResources()
@@ -679,11 +721,11 @@ class DatabaseHandler implements Runnable {
     /**
      * Query enabled modules for each position from database to set position modules map
      *
-     * @param stmt       Used for database connection
-     * @throws Exception If module shown enabled in user module table but item of this
-     *                   user not found in corresponding table
+     * @param stmt          Used for database connection
+     * @throws SQLException If module shown enabled in user module table but item of this
+     *                      user not found in corresponding table
      */
-    private void readPositionModules(final Statement stmt) throws Exception {
+    private void readPositionModules(final Statement stmt) throws SQLException {
 
         for (final Map.Entry<String, String> moduleTableEntry
                 : moduleTableMap.entrySet()) {
@@ -727,6 +769,51 @@ class DatabaseHandler implements Runnable {
     }
 
     /**
+     * Check existence of username and match password of this user in database
+     *
+     * @param stmt          Used for database connection
+     * @throws SQLException If meet database connection error
+     */
+    private void matchPassword(final Statement stmt) throws SQLException {
+
+        final String userModuleTable = parentActivity.getResources()
+                .getString(R.string.user_module_table);
+        final String existence = parentActivity.getResources().getString(R.string.existence);
+        final String matched = parentActivity.getResources().getString(R.string.matched);
+
+        // first check existence of this user
+        @SuppressLint("DefaultLocale")
+        final String userExistenceQuery = String.format(
+                "SELECT count(*) AS %s FROM %s WHERE username=\"%s\"",
+                existence, userModuleTable, username
+        );
+        final ResultSet userExistenceResult = stmt.executeQuery(userExistenceQuery);
+
+        // set API accessible variable usernameExisted
+        usernameExisted = userExistenceResult.next() &&
+                userExistenceResult.getInt(existence) == 1;
+
+        // close result set
+        userExistenceResult.close();
+
+        // then match login password in database
+        @SuppressLint("DefaultLocale")
+        final String matchPasswordQuery = String.format(
+                "SELECT count(*) AS %s FROM %s WHERE username=\"%s\" AND `password`=\"%s\"",
+                matched, userModuleTable, username, loginPassword
+        );
+        final ResultSet matchPasswordResult = stmt.executeQuery(matchPasswordQuery);
+
+        // set API accessible variable passwordMatched
+        passwordMatched = matchPasswordResult.next() &&
+                matchPasswordResult.getInt(matched) == 1;
+
+        // close result set
+        matchPasswordResult.close();
+
+    }
+
+    /**
      * Set moduleTableMap
      */
     private void initModuleTableMap() {
@@ -737,5 +824,19 @@ class DatabaseHandler implements Runnable {
             moduleTableMap.put(moduleNames[i], tableNames[i]);
 
     }
+
+    /**
+     * Get password match result
+     *
+     * @return Whether or not the login password is matched
+     */
+    boolean isPasswordMatched() { return passwordMatched; }
+
+    /**
+     * Get username existence check result
+     *
+     * @return Whether or not the username is existed
+     */
+    boolean isUsernameExisted() { return usernameExisted; }
 
 } // End of DatabaseHandler

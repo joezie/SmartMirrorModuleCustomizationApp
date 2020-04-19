@@ -10,11 +10,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import java.util.LinkedList;
+
 /**
  *  Activity for Login page, where users can login with their username and password by
  *  clicking login button, or create a new account by clicking register button
  */
 public class MainActivity extends AppCompatActivity {
+
+    // flags indicating whether or not username existed and password matched
+    private boolean usernameExisted = false;
+    private boolean passwordMatched = false;
 
     /**
      * set layout and button action
@@ -43,11 +49,37 @@ public class MainActivity extends AppCompatActivity {
             @SuppressLint("ApplySharedPref")
             @Override
             public void onClick(View v) {
-                // TODO: match username and password with database record
 
-                // get username
+                // get username and password
                 EditText userNameText = findViewById(R.id.userNameText_login);
+                EditText passwordText = findViewById(R.id.passwordText_login);
                 final String username = userNameText.getText().toString();
+                final String password = passwordText.getText().toString();
+
+                // match username and password with database record
+                checkUsernameAndMatchPassword(username, password);
+
+                // window alert when username not existed
+                if (!usernameExisted) {
+
+                    MyAlertDialog alertDialog = new MyAlertDialog(
+                            getResources().getString(R.string.username_not_existed_message));
+                    alertDialog.show(getSupportFragmentManager(),
+                            getResources().getString(R.string.username_not_existed_tag));
+                    return;
+
+                }
+
+                // window alert when password not matched
+                if (!passwordMatched) {
+
+                    MyAlertDialog alertDialog = new MyAlertDialog(
+                            getResources().getString(R.string.password_not_matched_message));
+                    alertDialog.show(getSupportFragmentManager(),
+                            getResources().getString(R.string.password_not_matched_tag));
+                    return;
+
+                }
 
                 // set username as globally accessible preference
                 getSharedPreferences(getResources()
@@ -57,10 +89,36 @@ public class MainActivity extends AppCompatActivity {
                         .commit();
 
                 Intent startIntent = new Intent(getApplicationContext(), UserActivity.class);
-                // startIntent.putExtra(getResources().getString(R.string.username), username);
                 startActivity(startIntent);
+
             }
         });
+
+    }
+
+    /**
+     * Run a thread to check existence of username and match password of this user in database
+     *
+     * @param username the username to be checked existence
+     * @param password the password to be matched
+     */
+    private void checkUsernameAndMatchPassword(final String username, final String password) {
+
+        // query database
+        DatabaseHandler handler = new DatabaseHandler(
+                this, getResources().getString(R.string.match_password),
+                username, password);
+        Thread thread = new Thread(handler);
+        thread.start();
+        try {
+            thread.join();
+
+            // set flags
+            usernameExisted = handler.isUsernameExisted();
+            passwordMatched = handler.isPasswordMatched();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
     }
 }
