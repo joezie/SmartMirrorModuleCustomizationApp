@@ -4,22 +4,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Pair;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Switch;
+import android.widget.TextView;
 
 import java.lang.String;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -36,7 +33,7 @@ public class AddModuleActivity extends AppCompatActivity {
     // button position passed from UserActivity
     private int position;
 
-    // stores configuration data of each module (field name, config)
+    // stores configuration data of each module (module name, (column name, value))
     private final Map<String, Map<String, Object>> moduleConfigMap = new LinkedHashMap<>();
 
     // stores status of each module (module name, status)
@@ -116,7 +113,19 @@ public class AddModuleActivity extends AppCompatActivity {
 
                     if (configMap != null && configMap.size() > 0) {
 
-                        configListView.setAdapter(new HeteroItemAdapter(configMap));
+                        // set adapter based on whether or not this module has integer type field
+                        if (hasIntField(configMap)) {
+
+                            // read ranges of integer type fields from database and pass to adapter
+                            configListView.setAdapter(new HeteroItemAdapter(
+                                    configMap, getRangeMap(selectedModule)));
+
+                        } else {
+
+                            // without integer type field
+                            configListView.setAdapter(new HeteroItemAdapter(configMap));
+
+                        }
 
                         // show remove and update buttons and hide add button
                         removeBtn.setVisibility(View.VISIBLE);
@@ -167,16 +176,34 @@ public class AddModuleActivity extends AppCompatActivity {
         // set default module if available
         if (getIntent().hasExtra(getResources().getString(R.string.default_module))) {
 
+            // set if passed by parent activity
+
             final String defaultModuleName = Objects.requireNonNull(getIntent()
                     .getExtras())
                     .getString(getResources().getString(R.string.default_module));
             final int defaultModulePos = moduleArrayAdapter.getPosition(defaultModuleName);
             moduleSpinner.setSelection(defaultModulePos);
 
+        } else {
+
+            // otherwise, set default module as one of the enabled modules at this position
+
+            for (final Map.Entry<String, Boolean> moduleStatusEntry : moduleStatusMap.entrySet()) {
+
+                if (moduleStatusEntry.getValue()) {
+                    final int defaultModulePos = moduleArrayAdapter.getPosition(
+                            moduleStatusEntry.getKey());
+                    moduleSpinner.setSelection(defaultModulePos);
+
+                    break;
+                }
+
+            }
+
         }
 
         // set layout manager of config list
-        RecyclerView configListView = findViewById(R.id.moduleConfigList_module);
+        final RecyclerView configListView = findViewById(R.id.moduleConfigList_module);
         configListView.setLayoutManager(new LinearLayoutManager(this));
 
         // set buttons action
@@ -196,13 +223,12 @@ public class AddModuleActivity extends AppCompatActivity {
 
         });
 
-        // TODO: set actions for add, remove, and update buttons
-
+        // set actions for add, remove, and update buttons
         Button addBtn = findViewById(R.id.addBtn_module);
         addBtn.setOnClickListener(new View.OnClickListener() {
 
             /**
-             * TODO: Generate a default item of this module for the user in the database;
+             * Generate a default item of this module for the user in the database;
              * reload the page with this module as default module
              *
              * @param v Dunmmy argument
@@ -217,6 +243,85 @@ public class AddModuleActivity extends AppCompatActivity {
 
         });
 
+        Button removeBtn = findViewById(R.id.removeBtn_module);
+        removeBtn.setOnClickListener(new View.OnClickListener() {
+
+            /**
+             * Remove the given module for the user in the database;
+             * reload the page with this module as default module
+             *
+             * @param v Dunmmy argument
+             */
+            @Override
+            public void onClick(View v) {
+
+                final String selectedModule = moduleSpinner.getSelectedItem().toString();
+                removeModule(selectedModule);
+
+            }
+
+        });
+
+        Button updateBtn = findViewById(R.id.updateBtn_module);
+        updateBtn.setOnClickListener(new View.OnClickListener() {
+
+            /**
+             * Update config of this module for the user in the database;
+             * reload the page with this module as default module
+             *
+             * @param v Dunmmy argument
+             */
+            @Override
+            public void onClick(View v) {
+
+                // read each field from user end according to type and update moduleConfigMap
+
+                final String selectedModule = moduleSpinner.getSelectedItem().toString();
+                Map<String, Object> configMap = moduleConfigMap.get(selectedModule);
+                assert configMap != null;
+
+                for (int pos = 0; pos < configListView.getChildCount(); ++pos) {
+
+                    RecyclerView.ViewHolder viewHolder =
+                            configListView.findViewHolderForAdapterPosition(pos);
+                    if (viewHolder instanceof EdittextItemViewHolder) {
+
+                        TextView fieldNameView =
+                                ((EdittextItemViewHolder)viewHolder).getFieldName();
+                        EditText textInputView =
+                                ((EdittextItemViewHolder)viewHolder).getInputText();
+                        configMap.put(fieldNameView.getText().toString(),
+                                textInputView.getText().toString());
+
+                    } else if (viewHolder instanceof SeekbarItemViewHolder) {
+
+                        TextView fieldNameView =
+                                ((SeekbarItemViewHolder)viewHolder).getFieldName();
+                        TextView progressView =
+                                ((SeekbarItemViewHolder)viewHolder).getProgress();
+                        configMap.put(fieldNameView.getText().toString(),
+                                Integer.valueOf(progressView.getText().toString()));
+
+                    } else if (viewHolder instanceof SwitchItemViewHolder) {
+
+                        TextView fieldNameView =
+                                ((SwitchItemViewHolder)viewHolder).getFieldName();
+                        Switch switchView =
+                                ((SwitchItemViewHolder)viewHolder).getSwitchButton();
+                        configMap.put(fieldNameView.getText().toString(),
+                                switchView.isChecked());
+
+                    }
+
+                }
+
+                // update in database
+                updateModuleConfig(selectedModule);
+
+            }
+
+        });
+
     }
 
     /**
@@ -226,7 +331,7 @@ public class AddModuleActivity extends AppCompatActivity {
     private void setModuleConfigMapAndModuleStatusMap() {
 
         DatabaseHandler handler = new DatabaseHandler(
-                this, getResources().getString(R.string.read),
+                this, getResources().getString(R.string.read_status_and_config),
                 username, position, moduleConfigMap, moduleStatusMap);
         Thread thread = new Thread(handler);
         thread.start();
@@ -257,6 +362,91 @@ public class AddModuleActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+    }
+
+    /**
+     * Run a thread to remove the given module for the user in the database;
+     * reload the page with this module as default module to set module config and status maps
+     *
+     * @param moduleName the module to be removed from database
+     */
+    private void removeModule(final String moduleName) {
+
+        DatabaseHandler handler = new DatabaseHandler(
+                this, getResources().getString(R.string.remove),
+                username, position, moduleName);
+        Thread thread = new Thread(handler);
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    /**
+     * Run a thread to update config of this module for the user in the database;
+     * reload the page with this module as default module to set module config and status maps
+     *
+     * @param moduleName the new module whose config are to be updated in database
+     */
+    private void updateModuleConfig(final String moduleName) {
+
+        DatabaseHandler handler = new DatabaseHandler(
+                this, getResources().getString(R.string.update),
+                username, position, moduleName, moduleConfigMap);
+        Thread thread = new Thread(handler);
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    /**
+     * Run a thread to query ranges of integer fields from database to set range map
+     *
+     * @param moduleName the module whose integer type fields ranges would be query
+     * @return           the range map containing (field name, (min, max))
+     */
+    private Map<String, Pair<Integer, Integer>> getRangeMap(final String moduleName) {
+
+        Map<String, Pair<Integer, Integer>> rangeMap = new LinkedHashMap<>();
+
+        DatabaseHandler handler = new DatabaseHandler(
+                this, getResources().getString(R.string.read_range),
+                moduleName, rangeMap);
+        Thread thread = new Thread(handler);
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return rangeMap;
+
+    }
+
+    /**
+     * Check if the given map has integer type fields
+     *
+     * @param m the map to be checked
+     * @return  whether or not this map contains integer type fields
+     */
+    private boolean hasIntField(final Map<String, Object> m) {
+
+        // set adapter based on whether or not this module has integer type field
+        for (final Object value : m.values()) {
+            if (value instanceof Integer) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 

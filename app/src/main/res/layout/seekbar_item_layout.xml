@@ -14,10 +14,22 @@
         android:layout_height="wrap_content"
         android:layout_weight="1" />
 
-    <SeekBar
-        android:id="@+id/bar_seekbar_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp" />
+    <RelativeLayout
+        android:layout_width="280dp"
+        android:layout_height="20dp">
+        <TextView
+            android:id="@+id/progress_seekbar_layout"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content" />
+
+        <SeekBar
+            android:id="@+id/bar_seekbar_layout"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="0dp" />
+    </RelativeLayout>
+
+
+
 </LinearLayout>

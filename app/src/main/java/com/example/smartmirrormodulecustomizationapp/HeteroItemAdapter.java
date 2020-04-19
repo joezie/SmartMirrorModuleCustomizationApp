@@ -1,8 +1,11 @@
 package com.example.smartmirrormodulecustomizationapp;
 
+import android.annotation.SuppressLint;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -23,15 +26,37 @@ public class HeteroItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private static final int SEEKBAR = 2;
     private static final int EDITTEXT = 3;
 
-    // stores items with different types (field name, config)
-    private final Map<String, Object> itemMap;
+    // field name and config list of module configs
     private final List<String> fieldNames;
     private final List<Object> configs;
 
-    HeteroItemAdapter(Map<String, Object> itemMap) {
-        this.itemMap = itemMap;
+    // stores range of integer type field (field name, (min, max))
+    private final Map<String, Pair<Integer, Integer>> rangeMap;
+
+    /**
+     * Constructor for module without integer type field
+     *
+     * @param itemMap stores (field name, config)
+     */
+    HeteroItemAdapter(final Map<String, Object> itemMap) {
         fieldNames = new ArrayList<>(itemMap.keySet());
         configs = new ArrayList<>(itemMap.values());
+
+        rangeMap = null;
+    }
+
+    /**
+     * Constructor for module with integer type field
+     *
+     * @param itemMap  stores (field name, config)
+     * @param rangeMap stores (field name, (min, max))
+     */
+    HeteroItemAdapter(final Map<String, Object> itemMap,
+                      final Map<String, Pair<Integer, Integer>> rangeMap) {
+        fieldNames = new ArrayList<>(itemMap.keySet());
+        configs = new ArrayList<>(itemMap.values());
+
+        this.rangeMap = rangeMap;
     }
 
     /**
@@ -135,16 +160,62 @@ public class HeteroItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     /**
-     * Set the field and integer value of the seek bar type row
+     * Set the field and integer value of the seek bar type row;
+     * Set seek bar change action to display progress number
      *
      * @param viewHolder The seek bar type view holder
      * @param position   The row index
      */
+    @SuppressLint("SetTextI18n")
     private void configureSeekbarItemViewHolder(SeekbarItemViewHolder viewHolder, int position) {
+
+        // get field name and integer value
         final String fieldName = fieldNames.get(position);
         final Integer intValue = (Integer) configs.get(position);
         viewHolder.getFieldName().setText(fieldName);
-        viewHolder.getBar().setProgress(intValue);
+
+        // get min and max value of the integer type field field
+        final Pair<Integer, Integer> rangePair = rangeMap.get(fieldName);
+        assert rangePair != null;
+        final int rangeMin = rangePair.first, rangeMax = rangePair.second;
+
+        // set seek bar progress and progress display
+        final SeekBar bar = viewHolder.getBar();
+        final TextView progressView = viewHolder.getProgress();
+        final int barProgress = getProgressOfValue(intValue, rangeMin, rangeMax);
+        progressView.setText(Integer.toString(intValue));
+        progressView.setX(getProgressPos(bar, barProgress, Integer.toString(intValue)));
+        bar.setProgress(barProgress);
+        bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            /**
+             * Display progress along with seek bar movement
+             *
+             * @param seekBar  the seek bar whose progress would be shown
+             * @param progress the progress of seek bar
+             * @param fromUser dummy argument
+             */
+            @Override
+            public void onProgressChanged(final SeekBar seekBar, final int progress,
+                                          final boolean fromUser) {
+
+                final String progressString = Integer.toString(getValueOfProgress(
+                        progress, rangeMin, rangeMax));
+                progressView.setText(progressString);
+                progressView.setX(getProgressPos(seekBar, progress, progressString));
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
     }
 
     /**
@@ -153,11 +224,58 @@ public class HeteroItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
      * @param viewHolder The edit text type view holder
      * @param position   The row index
      */
-    private void configureEdittextItemViewHolder(EdittextItemViewHolder viewHolder, int position) {
+    private void configureEdittextItemViewHolder(final EdittextItemViewHolder viewHolder,
+                                                 final int position) {
+
         final String fieldName = fieldNames.get(position);
         final String stringValue = (String) configs.get(position);
         viewHolder.getFieldName().setText(fieldName);
         viewHolder.getInputText().setText(stringValue, TextView.BufferType.EDITABLE);
+
+    }
+
+    /**
+     * Get the corresponding value of a progress within a range (min, max)
+     *
+     * @param progress the progress in [0, 100]
+     * @param min      the lower bound of range
+     * @param max      the upper bound of range
+     * @return         the corresponding value of the progress
+     */
+    private int getValueOfProgress(final int progress, final int min, final int max) {
+
+        return (int)((long)progress * ((long)max - (long)min) / 100 + (long)min);
+
+    }
+
+    /**
+     * Get the corresponding progress of a value within a range (min, max)
+     *
+     * @param value the value to be converted into progress
+     * @param min   the lower bound of range
+     * @param max   the upper bound of range
+     * @return      the corresponding progress of the value
+     */
+    private int getProgressOfValue(final int value, final int min, final int max) {
+
+        return (int)(((long)value - (long)min) * 100 / (long)max);
+
+    }
+
+    /**
+     * Get the X position of the display progress of seek bar
+     *
+     * @param bar            the bar whose cursor would be get X position
+     * @param progress       the progress of the cursor on the bar
+     * @param progressString the display string of the progress
+     * @return               the X position of the display progress
+     */
+    private float getProgressPos(final SeekBar bar, final int progress,
+                                 final String progressString) {
+
+        int offset = progress * (525 - 2 * bar.getThumbOffset()) / bar.getMax();
+        return 210 + offset + bar.getThumbOffset() / 2f - progressString.length() * 25;
+
     }
 
 } // END of SwitchItemAdapter

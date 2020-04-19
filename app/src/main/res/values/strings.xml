@@ -32,7 +32,10 @@
     <string name="update">Update</string>
     <string name="remove">Remove</string>
     <string name="add">Add</string>
-    <string name="read">Read</string>
+    <string name="read_status_and_config">ReadStatusAndConfig</string>
+    <string name="read_status">ReadStatus</string>
+    <string name="read_pos_modules">ReadPosModules</string>
+    <string name="read_range">ReadRange</string>
     <string name="back">Back</string>
     <string name="cameraicon">CameraIcon</string>
     <string name="JDBC_DRIVER">com.mysql.jdbc.Driver</string>
@@ -43,9 +46,14 @@
     <string name="JDBC_PREFIX">jdbc:mysql://</string>
     <string name="refer_to_youtube">refer to YouTube</string>
     <string name="user_module_table">smartmirrorschema.user_module_table</string>
+    <string name="range_table">smartmirrorschema.range_table</string>
     <string name="user_preference">UsernamePreference</string>
     <string name="undefined">Undefined</string>
     <string name="default_module">DefaultModule</string>
+    <string name="fieldName">fieldName</string>
+    <string name="min">min</string>
+    <string name="max">max</string>
+    <string name="EMPTY">EMPTY</string>
 
 
     <string-array name="moduleNames">
