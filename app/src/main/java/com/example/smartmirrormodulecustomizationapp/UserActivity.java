@@ -4,11 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -48,8 +46,11 @@ public class UserActivity extends AppCompatActivity {
                                 getResources().getString(R.string.undefined));
 
         // set welcome text
-        TextView welcomeText = findViewById(R.id.welcomeText_user);
-        welcomeText.setText(String.format("Welcome, %s!", username));
+        final TextView welcomeText = findViewById(R.id.welcomeText_user);
+        welcomeText.setText(welcomeText.getText()
+                .toString()
+                .replaceAll(getResources()
+                        .getString(R.string.username), username));
 
         // set logout button action
         Button logoutBtn = findViewById(R.id.logoutBtn_user);

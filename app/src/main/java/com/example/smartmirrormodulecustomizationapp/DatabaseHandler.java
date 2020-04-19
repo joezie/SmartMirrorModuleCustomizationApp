@@ -51,10 +51,12 @@ class DatabaseHandler implements Runnable {
     private final String optype_readStatus;
     private final String optype_readPosModules;
     private final String optype_readRange;
-    private final String optype_matchPassword;
-    private final String optype_update;
-    private final String optype_add;
-    private final String optype_remove;
+    private final String optype_matchUsernameAndPassword;
+    private final String optype_checkUsername;
+    private final String optype_addUser;
+    private final String optype_updateModuleConfig;
+    private final String optype_addModule;
+    private final String optype_removeModule;
     private final String operationType;
 
     // passed by parent activity: stores configuration data of each module (field name, config)
@@ -105,11 +107,18 @@ class DatabaseHandler implements Runnable {
                 .getString(R.string.read_pos_modules);
         optype_readRange = parentActivity.getResources()
                 .getString(R.string.read_range);
-        optype_matchPassword = parentActivity.getResources()
-                .getString(R.string.match_password);
-        optype_update = parentActivity.getResources().getString(R.string.update);
-        optype_add = parentActivity.getResources().getString(R.string.add);
-        optype_remove = parentActivity.getResources().getString(R.string.remove);
+        optype_matchUsernameAndPassword = parentActivity.getResources()
+                .getString(R.string.match_username_and_password);
+        optype_checkUsername = parentActivity.getResources()
+                .getString(R.string.check_username);
+        optype_updateModuleConfig = parentActivity.getResources()
+                .getString(R.string.update_module_config);
+        optype_addModule = parentActivity.getResources()
+                .getString(R.string.add_module);
+        optype_removeModule = parentActivity.getResources()
+                .getString(R.string.remove_module);
+        optype_addUser = parentActivity.getResources()
+                .getString(R.string.add_user);
 
         // set moduleTableMap
         moduleTableMap = new LinkedHashMap<>();
@@ -160,7 +169,7 @@ class DatabaseHandler implements Runnable {
     }
 
     /**
-     * Constructor used for add and remove operations
+     * Constructor used for add and remove module operations
      *
      * @param parentActivity the parent activity that calls this database handler
      * @param operationType  the database operation type
@@ -176,7 +185,7 @@ class DatabaseHandler implements Runnable {
         this(parentActivity, operationType, username, position);
 
         // check operation type
-        assert operationType.equals(optype_add) || operationType.equals(optype_remove);
+        assert operationType.equals(optype_addModule) || operationType.equals(optype_removeModule);
 
         // set selected module
         this.moduleName = moduleName;
@@ -184,7 +193,7 @@ class DatabaseHandler implements Runnable {
     }
 
     /**
-     * Constructor used for update operation
+     * Constructor used for update module config operation
      *
      * @param parentActivity  the parent activity that calls this database handler
      * @param operationType   the database operation type
@@ -202,7 +211,7 @@ class DatabaseHandler implements Runnable {
         this(parentActivity, operationType, username, position);
 
         // check operation type
-        assert operationType.equals(optype_update);
+        assert operationType.equals(optype_updateModuleConfig);
 
         // set selected module
         this.moduleName = moduleName;
@@ -263,11 +272,11 @@ class DatabaseHandler implements Runnable {
     }
 
     /**
-     * Constructor used for match password operation
+     * Constructor used for match username and password operation and add user operation
      *
      * @param parentActivity the parent activity that calls this database handler
      * @param operationType  the database operation type
-     * @param username       the current user
+     * @param username       the username to be checked
      * @param loginPassword  the login password to be matched
      */
     @SuppressLint("Assert")
@@ -278,10 +287,30 @@ class DatabaseHandler implements Runnable {
         this(parentActivity, operationType, username, -1);
 
         // check operation type
-        assert operationType.equals(optype_matchPassword);
+        assert operationType.equals(optype_matchUsernameAndPassword)
+                || operationType.equals(optype_addUser);
 
         // set login password
         this.loginPassword = loginPassword;
+
+    }
+
+    /**
+     * Constructor used for check username existence operation
+     *
+     * @param parentActivity the parent activity that calls this database handler
+     * @param operationType  the database operation type
+     * @param username       the username to be checked
+     */
+    @SuppressLint("Assert")
+    DatabaseHandler(final AppCompatActivity parentActivity, final String operationType,
+                    final String username) {
+
+        // set common members and constant strings
+        this(parentActivity, operationType, username, -1);
+
+        // check operation type
+        assert operationType.equals(optype_checkUsername);
 
     }
 
@@ -311,16 +340,21 @@ class DatabaseHandler implements Runnable {
             } else if (operationType.equals(optype_readPosModules)) {
                 readModuleStatus(stmt);
                 readPositionModules(stmt);
-            } else if (operationType.equals(optype_add)) {
+            } else if (operationType.equals(optype_addModule)) {
                 addModule(stmt);
-            } else if (operationType.equals(optype_remove)) {
+            } else if (operationType.equals(optype_removeModule)) {
                 removeModule(stmt);
-            } else if (operationType.equals(optype_update)) {
+            } else if (operationType.equals(optype_updateModuleConfig)) {
                 updateModuleConfig(stmt);
             } else if (operationType.equals(optype_readRange)) {
                 readRanges(stmt);
-            } else if (operationType.equals(optype_matchPassword)) {
+            } else if (operationType.equals(optype_matchUsernameAndPassword)) {
+                checkUsernameExistence(stmt);
                 matchPassword(stmt);
+            } else if (operationType.equals(optype_checkUsername)) {
+                checkUsernameExistence(stmt);
+            } else if (operationType.equals(optype_addUser)) {
+                addUser(stmt);
             } else {
                 throw new IllegalStateException(
                         "Unsupported operation type " + operationType);
@@ -769,7 +803,7 @@ class DatabaseHandler implements Runnable {
     }
 
     /**
-     * Check existence of username and match password of this user in database
+     * Match password of this user in database
      *
      * @param stmt          Used for database connection
      * @throws SQLException If meet database connection error
@@ -778,8 +812,36 @@ class DatabaseHandler implements Runnable {
 
         final String userModuleTable = parentActivity.getResources()
                 .getString(R.string.user_module_table);
-        final String existence = parentActivity.getResources().getString(R.string.existence);
         final String matched = parentActivity.getResources().getString(R.string.matched);
+
+        // match login password in database
+        @SuppressLint("DefaultLocale")
+        final String matchPasswordQuery = String.format(
+                "SELECT count(*) AS %s FROM %s WHERE username=\"%s\" AND `password`=\"%s\"",
+                matched, userModuleTable, username, loginPassword
+        );
+        final ResultSet matchPasswordResult = stmt.executeQuery(matchPasswordQuery);
+
+        // set API accessible variable passwordMatched
+        passwordMatched = matchPasswordResult.next() &&
+                matchPasswordResult.getInt(matched) == 1;
+
+        // close result set
+        matchPasswordResult.close();
+
+    }
+
+    /**
+     * Check existence of username in database
+     *
+     * @param stmt          Used for database connection
+     * @throws SQLException If meet database connection error
+     */
+    private void checkUsernameExistence(final Statement stmt) throws SQLException {
+
+        final String userModuleTable = parentActivity.getResources()
+                .getString(R.string.user_module_table);
+        final String existence = parentActivity.getResources().getString(R.string.existence);
 
         // first check existence of this user
         @SuppressLint("DefaultLocale")
@@ -796,20 +858,29 @@ class DatabaseHandler implements Runnable {
         // close result set
         userExistenceResult.close();
 
-        // then match login password in database
-        @SuppressLint("DefaultLocale")
-        final String matchPasswordQuery = String.format(
-                "SELECT count(*) AS %s FROM %s WHERE username=\"%s\" AND `password`=\"%s\"",
-                matched, userModuleTable, username, loginPassword
-        );
-        final ResultSet matchPasswordResult = stmt.executeQuery(matchPasswordQuery);
+    }
 
-        // set API accessible variable passwordMatched
-        passwordMatched = matchPasswordResult.next() &&
-                matchPasswordResult.getInt(matched) == 1;
+    /**
+     * Add an item with all modules disabled to user module table with given username and password
+     *
+     * @param stmt          Used for database connection
+     * @throws SQLException If cannot add an item to database for new module
+     */
+    private void addUser(final Statement stmt) throws SQLException {
 
-        // close result set
-        matchPasswordResult.close();
+        final String userModuleTable = parentActivity.getResources()
+                .getString(R.string.user_module_table);
+        @SuppressLint("DefaultLocale") final String addUserOperation =
+                String.format("INSERT INTO %s (`username`, `password`) VALUES (\"%s\", \"%s\")",
+                        userModuleTable, username, loginPassword);
+
+        if (stmt.executeUpdate(addUserOperation) == 0) {
+
+            // throws exception on failure
+            throw new IllegalStateException(
+                    "Add new user " + username + " to database failed");
+
+        }
 
     }
 

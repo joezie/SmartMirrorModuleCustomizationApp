@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
 
         // query database
         DatabaseHandler handler = new DatabaseHandler(
-                this, getResources().getString(R.string.match_password),
+                this, getResources().getString(R.string.match_username_and_password),
                 username, password);
         Thread thread = new Thread(handler);
         thread.start();

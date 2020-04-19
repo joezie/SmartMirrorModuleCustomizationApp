@@ -352,7 +352,7 @@ public class AddModuleActivity extends AppCompatActivity {
     private void addNewModule(final String moduleName) {
 
         DatabaseHandler handler = new DatabaseHandler(
-                this, getResources().getString(R.string.add),
+                this, getResources().getString(R.string.add_module),
                 username, position, moduleName);
         Thread thread = new Thread(handler);
         thread.start();
@@ -373,7 +373,7 @@ public class AddModuleActivity extends AppCompatActivity {
     private void removeModule(final String moduleName) {
 
         DatabaseHandler handler = new DatabaseHandler(
-                this, getResources().getString(R.string.remove),
+                this, getResources().getString(R.string.remove_module),
                 username, position, moduleName);
         Thread thread = new Thread(handler);
         thread.start();
@@ -394,7 +394,7 @@ public class AddModuleActivity extends AppCompatActivity {
     private void updateModuleConfig(final String moduleName) {
 
         DatabaseHandler handler = new DatabaseHandler(
-                this, getResources().getString(R.string.update),
+                this, getResources().getString(R.string.update_module_config),
                 username, position, moduleName, moduleConfigMap);
         Thread thread = new Thread(handler);
         thread.start();
