@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
                 if (!usernameExisted) {
 
                     MyAlertDialog alertDialog = new MyAlertDialog(
+                            getResources().getString(R.string.ERROR),
                             getResources().getString(R.string.username_not_existed_message));
                     alertDialog.show(getSupportFragmentManager(),
                             getResources().getString(R.string.username_not_existed_tag));
@@ -74,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
                 if (!passwordMatched) {
 
                     MyAlertDialog alertDialog = new MyAlertDialog(
+                            getResources().getString(R.string.ERROR),
                             getResources().getString(R.string.password_not_matched_message));
                     alertDialog.show(getSupportFragmentManager(),
                             getResources().getString(R.string.password_not_matched_tag));

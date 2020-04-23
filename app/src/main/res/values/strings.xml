@@ -1,4 +1,16 @@
 <resources>
+
+    <!-- Application specific configurations -->
+
+    <string name="DATABASE_URL">35.229.17.244:3306</string>
+    <string name="DATABASE_NAME">smartmirrorschema</string>
+    <string name="DATABASE_USERNAME">joezie</string>
+    <string name="DATABASE_PASSWORD">yigemima</string>
+    <string name="PI_URL">192.168.137.239</string>
+    <string name="PI_PORT">2540</string>
+
+    <!-- Constants for UI -->
+
     <string name="app_name">Your Smart Mirror</string>
     <string name="password">Password</string>
     <string name="register">Register</string>
@@ -32,6 +44,13 @@
     <string name="update">Update</string>
     <string name="remove">Remove</string>
     <string name="add">Add</string>
+    <string name="back">Back</string>
+    <string name="cameraicon">CameraIcon</string>=
+    <string name="refer_to_youtube">refer to YouTube</string>
+
+
+    <!-- Constants for Java -->
+
     <string name="add_module">AddModule</string>
     <string name="add_user">AddUser</string>
     <string name="remove_module">RemoveModule</string>
@@ -42,15 +61,8 @@
     <string name="read_range">ReadRange</string>
     <string name="match_username_and_password">MatchUsernameAndPassword</string>
     <string name="check_username">CheckUsername</string>
-    <string name="back">Back</string>
-    <string name="cameraicon">CameraIcon</string>
     <string name="JDBC_DRIVER">com.mysql.jdbc.Driver</string>
-    <string name="DATABASE_URL">35.229.17.244:3306</string>
-    <string name="DATABASE_NAME">smartmirrorschema</string>
-    <string name="DATABASE_USERNAME">joezie</string>
-    <string name="DATABASE_PASSWORD">yigemima</string>
     <string name="JDBC_PREFIX">jdbc:mysql://</string>
-    <string name="refer_to_youtube">refer to YouTube</string>
     <string name="user_module_table">smartmirrorschema.user_module_table</string>
     <string name="range_table">smartmirrorschema.range_table</string>
     <string name="user_preference">UsernamePreference</string>
@@ -63,7 +75,11 @@
     <string name="existence">existence</string>
     <string name="matched">matched</string>
     <string name="ERROR">ERROR</string>
+    <string name="SUCCESS">SUCCESS</string>
     <string name="OK">OK</string>
+    <string name="collecting_and_running">Collecting and running</string>
+    <string name="collection_success">Collection success!</string>
+    <string name="collection_failed">Collection failed!</string>
     <string name="username_not_existed_message">The username not existed!</string>
     <string name="username_not_existed_tag">USERNAME_NOT_EXISTED</string>
     <string name="password_not_matched_message">Incorrect password!</string>
@@ -74,7 +90,13 @@
     <string name="two_passwords_not_euqal_tag">TWO_PASSWORDS_NOT_EQUAL</string>
     <string name="fields_empty_message">Please fill in all fields!</string>
     <string name="fields_empty_tag">FIELDS_EMPTY</string>
+    <string name="register_success_message">Registration success! Please login now.</string>
+    <string name="register_success_tag">REGISTER_SUCCESS</string>
+    <string name="register_failed_message">Photo collection failed. Please try again.</string>
+    <string name="register_failed_tag">REGISTER_FAILED</string>
 
+
+    <!-- String Arrays -->
 
     <string-array name="moduleNames">
         <item>youtube_module</item>
@@ -87,4 +109,5 @@
         <item>smartmirrorschema.stock_module_config_table</item>
         <item>smartmirrorschema.covid_module_config_table</item>
     </string-array>
+
 </resources>

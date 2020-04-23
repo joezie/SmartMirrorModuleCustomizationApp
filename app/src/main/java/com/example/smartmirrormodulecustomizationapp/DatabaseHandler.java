@@ -20,7 +20,7 @@ import java.util.Objects;
 class DatabaseHandler implements Runnable {
 
     // the parent activity that calls this database handler
-    private AppCompatActivity parentActivity;
+    private final AppCompatActivity parentActivity;
 
     // the current user
     private final String username;

@@ -53,6 +53,7 @@ public class RegisterActivity extends AppCompatActivity {
                 if (username.isEmpty() || password.isEmpty() || confirmedPassword.isEmpty()) {
 
                     MyAlertDialog alertDialog = new MyAlertDialog(
+                            getResources().getString(R.string.ERROR),
                             getResources().getString(R.string.fields_empty_message));
                     alertDialog.show(getSupportFragmentManager(),
                             getResources().getString(R.string.fields_empty_tag));
@@ -64,6 +65,7 @@ public class RegisterActivity extends AppCompatActivity {
                 if (checkUsername(username)) {
 
                     MyAlertDialog alertDialog = new MyAlertDialog(
+                            getResources().getString(R.string.ERROR),
                             getResources().getString(R.string.username_already_existed_message));
                     alertDialog.show(getSupportFragmentManager(),
                             getResources().getString(R.string.username_already_existed_tag));
@@ -75,6 +77,7 @@ public class RegisterActivity extends AppCompatActivity {
                 if (!password.equals(confirmedPassword)) {
 
                     MyAlertDialog alertDialog = new MyAlertDialog(
+                            getResources().getString(R.string.ERROR),
                             getResources().getString(R.string.two_passwords_not_euqal_message));
                     alertDialog.show(getSupportFragmentManager(),
                             getResources().getString(R.string.two_passwords_not_euqal_tag));
