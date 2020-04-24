@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -53,32 +52,11 @@ public class PhotoCollectionActivity extends AppCompatActivity {
 
         // set button action
         final ImageButton takePhotoBtn = findViewById(R.id.takePhotoBtn_collection);
-        final TextView progressText = findViewById(R.id.progressText_collection);
         takePhotoBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                progressText.setText(getResources().getString(R.string.collecting_and_running));
-
-                if (triggerPhotoCollection()) {
-
-                    final MyAlertDialog alertDialog = new MyAlertDialog(
-                            getResources().getString(R.string.SUCCESS),
-                            getResources().getString(R.string.register_success_message));
-                    alertDialog.show(getSupportFragmentManager(),
-                            getResources().getString(R.string.register_success_tag));
-                    progressText.setText(getResources().getString(R.string.collection_success));
-
-                } else {
-
-                    final MyAlertDialog alertDialog = new MyAlertDialog(
-                            getResources().getString(R.string.ERROR),
-                            getResources().getString(R.string.register_failed_message));
-                    alertDialog.show(getSupportFragmentManager(),
-                            getResources().getString(R.string.register_failed_tag));
-                    progressText.setText(getResources().getString(R.string.collection_failed));
-
-                }
+                triggerPhotoCollection();
 
             }
         });
@@ -96,24 +74,14 @@ public class PhotoCollectionActivity extends AppCompatActivity {
     }
 
     /**
-     * Run a thread to send a trigger message to host with username, and return trigger success
-     * status
-     *
-     * @return the trigger success status
+     * Run a thread to send a trigger message to host with username
      */
-    private boolean triggerPhotoCollection() {
+    private void triggerPhotoCollection() {
 
         final PhotoCollectionTrigger trigger = new PhotoCollectionTrigger(
                 this, username);
-        Thread thread = new Thread(trigger);
+        final Thread thread = new Thread(trigger);
         thread.start();
-        try {
-            thread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            return false;
-        }
-        return trigger.isTriggerSuccess();
 
     }
 

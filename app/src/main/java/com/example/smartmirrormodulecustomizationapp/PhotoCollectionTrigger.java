@@ -1,5 +1,7 @@
 package com.example.smartmirrormodulecustomizationapp;
 
+import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.DataInputStream;
@@ -8,6 +10,9 @@ import java.io.IOException;
 import java.net.Socket;
 
 public class PhotoCollectionTrigger implements Runnable {
+
+    // parent activity that calls this trigger
+    private final AppCompatActivity parentActivity;
 
     // the user to be collected face photos
     private final String username;
@@ -21,6 +26,7 @@ public class PhotoCollectionTrigger implements Runnable {
 
     PhotoCollectionTrigger(final AppCompatActivity parentActivity, final String username) {
 
+        this.parentActivity = parentActivity;
         this.username = username;
         triggerSuccessFlag = false;
 
@@ -67,6 +73,20 @@ public class PhotoCollectionTrigger implements Runnable {
 
         }
 
+        // update progress text view
+        parentActivity.runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+
+                final TextView progressText = parentActivity.findViewById(
+                        R.id.progressText_collection);
+                progressText.setText(parentActivity.getResources().getString(
+                        R.string.collecting_and_running));
+
+            }
+        });
+
         // wait for confirmation message from host
         try {
 
@@ -78,13 +98,42 @@ public class PhotoCollectionTrigger implements Runnable {
 
         }
 
-    }
+        // update progress text view and trigger alert dialog
+        parentActivity.runOnUiThread(new Runnable() {
 
-    /**
-     * Check if the photo collection is triggered successfully
-     *
-     * @return the trigger success status
-     */
-    boolean isTriggerSuccess() { return triggerSuccessFlag; }
+            @Override
+            public void run() {
+
+                final TextView progressText = parentActivity.findViewById(
+                        R.id.progressText_collection);
+
+                if (triggerSuccessFlag) {
+
+                    final MyAlertDialog alertDialog = new MyAlertDialog(
+                            parentActivity.getResources().getString(R.string.SUCCESS),
+                            parentActivity.getResources().getString(
+                                    R.string.register_success_message));
+                    alertDialog.show(parentActivity.getSupportFragmentManager(),
+                            parentActivity.getResources().getString(R.string.register_success_tag));
+                    progressText.setText(parentActivity.getResources().getString(
+                            R.string.collection_success));
+
+                } else {
+
+                    final MyAlertDialog alertDialog = new MyAlertDialog(
+                            parentActivity.getResources().getString(R.string.ERROR),
+                            parentActivity.getResources().getString(
+                                    R.string.register_failed_message));
+                    alertDialog.show(parentActivity.getSupportFragmentManager(),
+                            parentActivity.getResources().getString(R.string.register_failed_tag));
+                    progressText.setText(parentActivity.getResources().getString(
+                            R.string.collection_failed));
+
+                }
+
+            }
+        });
+
+    }
 
 }

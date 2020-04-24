@@ -9,7 +9,7 @@
     <TextView
         android:id="@+id/goToMirrorText_collection"
         android:layout_width="257dp"
-        android:layout_height="54dp"
+        android:layout_height="83dp"
         android:layout_marginTop="128dp"
         android:text="@string/go_to_mirror"
         android:textAlignment="center"

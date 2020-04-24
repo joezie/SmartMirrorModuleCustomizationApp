@@ -6,7 +6,7 @@
     <string name="DATABASE_NAME">smartmirrorschema</string>
     <string name="DATABASE_USERNAME">joezie</string>
     <string name="DATABASE_PASSWORD">yigemima</string>
-    <string name="PI_URL">192.168.137.239</string>
+    <string name="PI_URL">192.168.137.184</string>
     <string name="PI_PORT">2540</string>
     <string name="CLOUD_URL">34.69.18.117</string>
     <string name="CLOUD_PORT">2540</string>
@@ -20,7 +20,8 @@
     <string name="username">Username</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="one_step_left">Just one step left!</string>
-    <string name="go_to_mirror">Username, just one step left! \n Please go to the smart mirror camera and take 5 photos of your face.</string>
+    <string name="go_to_mirror">Username, just one step left! \n Please go to the smart mirror
+        camera and press the camera button below to take photos of your face.</string>
     <string name="take_photo">Take photo</string>
     <string name="progress">Progress</string>
     <string name="cancel">Cancel</string>
@@ -79,7 +80,7 @@
     <string name="ERROR">ERROR</string>
     <string name="SUCCESS">SUCCESS</string>
     <string name="OK">OK</string>
-    <string name="collecting_and_running">Collecting and running</string>
+    <string name="collecting_and_running">Collecting and running...</string>
     <string name="collection_success">Collection success!</string>
     <string name="collection_failed">Collection failed!</string>
     <string name="username_not_existed_message">The username not existed!</string>
