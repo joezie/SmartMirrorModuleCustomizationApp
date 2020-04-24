@@ -45,10 +45,13 @@ public class ConfigReloadTrigger implements Runnable {
 
         }
 
+        final int usernameLen = username.length();
+        final String lenStr = usernameLen + "\n";
+
         // send trigger message with username and its length to host
         try {
 
-            outputToHost.writeInt(username.length());
+            outputToHost.writeBytes(lenStr);
             outputToHost.writeBytes(username);
             outputToHost.flush();
 
