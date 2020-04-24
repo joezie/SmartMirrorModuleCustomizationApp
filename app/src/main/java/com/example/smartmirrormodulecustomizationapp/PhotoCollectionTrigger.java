@@ -1,21 +1,13 @@
 package com.example.smartmirrormodulecustomizationapp;
 
-import android.net.InetAddresses;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.Inet4Address;
-import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 public class PhotoCollectionTrigger implements Runnable {
-
-    // the parent activity that calls this trigger
-    private final AppCompatActivity parentActivity;
 
     // the user to be collected face photos
     private final String username;
@@ -29,13 +21,11 @@ public class PhotoCollectionTrigger implements Runnable {
 
     PhotoCollectionTrigger(final AppCompatActivity parentActivity, final String username) {
 
-        this.parentActivity = parentActivity;
         this.username = username;
         triggerSuccessFlag = false;
 
         hostUrl = parentActivity.getResources().getString(R.string.PI_URL);
         hostPort = Integer.parseInt(parentActivity.getResources().getString(R.string.PI_PORT));
-
 
     }
 

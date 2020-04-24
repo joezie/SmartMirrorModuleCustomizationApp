@@ -8,6 +8,8 @@
     <string name="DATABASE_PASSWORD">yigemima</string>
     <string name="PI_URL">192.168.137.239</string>
     <string name="PI_PORT">2540</string>
+    <string name="CLOUD_URL">34.69.18.117</string>
+    <string name="CLOUD_PORT">2540</string>
 
     <!-- Constants for UI -->
 

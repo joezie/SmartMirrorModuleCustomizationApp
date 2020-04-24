@@ -358,6 +358,7 @@ public class AddModuleActivity extends AppCompatActivity {
         thread.start();
         try {
             thread.join();
+            triggerConfigReload();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -379,6 +380,7 @@ public class AddModuleActivity extends AppCompatActivity {
         thread.start();
         try {
             thread.join();
+            triggerConfigReload();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -400,6 +402,7 @@ public class AddModuleActivity extends AppCompatActivity {
         thread.start();
         try {
             thread.join();
+            triggerConfigReload();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -447,6 +450,22 @@ public class AddModuleActivity extends AppCompatActivity {
         }
 
         return false;
+    }
+
+    /**
+     * Run a thread to send a trigger message to cloud server with username
+     */
+    private void triggerConfigReload() {
+
+        ConfigReloadTrigger handler = new ConfigReloadTrigger(this, username);
+        Thread thread = new Thread(handler);
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
     }
 
 
