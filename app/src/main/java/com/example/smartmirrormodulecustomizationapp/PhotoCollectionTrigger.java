@@ -24,6 +24,9 @@ public class PhotoCollectionTrigger implements Runnable {
     private final String hostUrl;
     private final int hostPort;
 
+    // refresh header for trigger message
+    private final int photoCollectionHeader;
+
     PhotoCollectionTrigger(final AppCompatActivity parentActivity, final String username) {
 
         this.parentActivity = parentActivity;
@@ -32,6 +35,9 @@ public class PhotoCollectionTrigger implements Runnable {
 
         hostUrl = parentActivity.getResources().getString(R.string.PI_URL);
         hostPort = Integer.parseInt(parentActivity.getResources().getString(R.string.PI_PORT));
+
+        photoCollectionHeader = Integer.parseInt(parentActivity.getResources().getString(
+                R.string.PHOTO_COLLECTION));
 
     }
 
@@ -59,9 +65,10 @@ public class PhotoCollectionTrigger implements Runnable {
 
         }
 
-        // send trigger message with username and its length to host
+        // send trigger message with PHOTO_COLLECTION header, username, and its length to host
         try {
 
+            outputToHost.writeInt(photoCollectionHeader);
             outputToHost.writeInt(username.length());
             outputToHost.writeBytes(username);
             outputToHost.flush();

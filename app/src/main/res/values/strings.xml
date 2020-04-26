@@ -6,7 +6,7 @@
     <string name="DATABASE_NAME">smartmirrorschema</string>
     <string name="DATABASE_USERNAME">joezie</string>
     <string name="DATABASE_PASSWORD">yigemima</string>
-    <string name="PI_URL">192.168.137.184</string>
+    <string name="PI_URL">192.168.137.239</string>
     <string name="PI_PORT">2540</string>
     <string name="CLOUD_URL">34.69.18.117</string>
     <string name="CLOUD_PORT">2540</string>
@@ -80,7 +80,7 @@
     <string name="ERROR">ERROR</string>
     <string name="SUCCESS">SUCCESS</string>
     <string name="OK">OK</string>
-    <string name="collecting_and_running">Collecting and running...</string>
+    <string name="collecting_and_running">Collecting and training dataset…</string>
     <string name="collection_success">Collection success!</string>
     <string name="collection_failed">Collection failed!</string>
     <string name="username_not_existed_message">The username not existed!</string>
@@ -97,6 +97,9 @@
     <string name="register_success_tag">REGISTER_SUCCESS</string>
     <string name="register_failed_message">Photo collection failed. Please try again.</string>
     <string name="register_failed_tag">REGISTER_FAILED</string>
+    <string name="PHOTO_COLLECTION">1</string>
+    <string name="REFRESH">2</string>
+    <string name="MODULE_UPDATE">1</string>
 
 
     <!-- String Arrays -->
