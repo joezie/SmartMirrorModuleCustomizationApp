@@ -13,7 +13,7 @@
 
     <!-- Constants for UI -->
 
-    <string name="app_name">Your Smart Mirror</string>
+    <string name="app_name">DIY Mirror</string>
     <string name="password">Password</string>
     <string name="register">Register</string>
     <string name="log_in">Log In</string>

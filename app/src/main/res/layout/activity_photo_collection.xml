@@ -31,8 +31,8 @@
 
     <TextView
         android:id="@+id/progressText_collection"
-        android:layout_width="172dp"
-        android:layout_height="67dp"
+        android:layout_width="277dp"
+        android:layout_height="57dp"
         android:layout_marginTop="28dp"
         android:text="@string/progress"
         android:textAlignment="center"
