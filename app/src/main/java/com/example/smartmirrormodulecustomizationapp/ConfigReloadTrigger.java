@@ -21,11 +21,15 @@ public class ConfigReloadTrigger implements Runnable {
     private final int piPort;
 
     // a flag indicating if the config reloading is triggered successfully
-    private boolean reloadSuccessFlag;
+    private byte reloadSuccessFlag;
 
     // refresh header for trigger message
     private final int refreshHeader;
     private final int moduleUpdateHeader;
+
+    // status for config reloading
+    private final byte reloadFailedStatus;
+    private final byte matchedUserStatus;
 
     ConfigReloadTrigger(final AppCompatActivity parentActivity, final String username) {
 
@@ -40,8 +44,12 @@ public class ConfigReloadTrigger implements Runnable {
         refreshHeader = Integer.parseInt(parentActivity.getResources().getString(R.string.REFRESH));
         moduleUpdateHeader = Integer.parseInt(parentActivity.getResources().getString(
                 R.string.MODULE_UPDATE));
+        reloadFailedStatus = Byte.parseByte(parentActivity.getResources().getString(
+                R.string.RELOAD_FAILED));
+        matchedUserStatus = Byte.parseByte(parentActivity.getResources().getString(
+                R.string.USER_MATCHED));
 
-        reloadSuccessFlag = false;
+        reloadSuccessFlag = reloadFailedStatus;
         
     }
 
@@ -91,17 +99,17 @@ public class ConfigReloadTrigger implements Runnable {
         //  wait for confirmation message from cloud server host
         try {
 
-            reloadSuccessFlag = inputFromCloud.readBoolean();
+            reloadSuccessFlag = inputFromCloud.readByte();
 
         } catch (IOException e) {
 
             e.printStackTrace();
-            reloadSuccessFlag = false;
+            reloadSuccessFlag = reloadFailedStatus;
 
         }
 
         // send refresh trigger message to raspberry pi host on success
-        if (reloadSuccessFlag) {
+        if (reloadSuccessFlag == matchedUserStatus) {
 
             // build connection with raspberry pi host
             try {
@@ -113,7 +121,7 @@ public class ConfigReloadTrigger implements Runnable {
             catch (IOException e) {
 
                 e.printStackTrace();
-                reloadSuccessFlag = false;
+                reloadSuccessFlag = reloadFailedStatus;
                 return;
 
             }
@@ -127,7 +135,7 @@ public class ConfigReloadTrigger implements Runnable {
             } catch (IOException e) {
 
                 e.printStackTrace();
-                reloadSuccessFlag = false;
+                reloadSuccessFlag = reloadFailedStatus;
 
             }
 
@@ -140,6 +148,6 @@ public class ConfigReloadTrigger implements Runnable {
      *
      * @return the trigger success status
      */
-    boolean isReloadSuccess() { return reloadSuccessFlag; }
+    byte isReloadSuccess() { return reloadSuccessFlag; }
 
 }

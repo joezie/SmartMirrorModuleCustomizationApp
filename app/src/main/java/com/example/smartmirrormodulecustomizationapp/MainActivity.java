@@ -64,7 +64,8 @@ public class MainActivity extends AppCompatActivity {
 
                     MyAlertDialog alertDialog = new MyAlertDialog(
                             getResources().getString(R.string.ERROR),
-                            getResources().getString(R.string.username_not_existed_message));
+                            getResources().getString(R.string.username_not_existed_message),
+                            false);
                     alertDialog.show(getSupportFragmentManager(),
                             getResources().getString(R.string.username_not_existed_tag));
                     return;
@@ -76,7 +77,8 @@ public class MainActivity extends AppCompatActivity {
 
                     MyAlertDialog alertDialog = new MyAlertDialog(
                             getResources().getString(R.string.ERROR),
-                            getResources().getString(R.string.password_not_matched_message));
+                            getResources().getString(R.string.password_not_matched_message),
+                            false);
                     alertDialog.show(getSupportFragmentManager(),
                             getResources().getString(R.string.password_not_matched_tag));
                     return;

@@ -237,7 +237,26 @@ public class AddModuleActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 final String selectedModule = moduleSpinner.getSelectedItem().toString();
-                addNewModule(selectedModule);
+                if (addNewModule(selectedModule) == Byte.parseByte(getResources().getString(
+                        R.string.RELOAD_FAILED))) {
+
+                    final MyAlertDialog alertDialog = new MyAlertDialog(
+                            getResources().getString(R.string.ERROR),
+                            getResources().getString(R.string.module_add_failed_message),
+                            false);
+                    alertDialog.show(getSupportFragmentManager(), getResources().getString(
+                            R.string.module_add_failed_tag));
+
+                } else {
+
+                    final MyAlertDialog alertDialog = new MyAlertDialog(
+                            getResources().getString(R.string.SUCCESS),
+                            getResources().getString(R.string.module_add_success_message),
+                            true, AddModuleActivity.this, selectedModule);
+                    alertDialog.show(getSupportFragmentManager(), getResources().getString(
+                            R.string.module_add_success_tag));
+
+                }
 
             }
 
@@ -256,7 +275,26 @@ public class AddModuleActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 final String selectedModule = moduleSpinner.getSelectedItem().toString();
-                removeModule(selectedModule);
+                if (removeModule(selectedModule) == Byte.parseByte(getResources().getString(
+                        R.string.RELOAD_FAILED))) {
+
+                    final MyAlertDialog alertDialog = new MyAlertDialog(
+                            getResources().getString(R.string.ERROR),
+                            getResources().getString(R.string.module_remove_failed_message),
+                            false);
+                    alertDialog.show(getSupportFragmentManager(), getResources().getString(
+                            R.string.module_remove_failed_tag));
+
+                } else {
+
+                    final MyAlertDialog alertDialog = new MyAlertDialog(
+                            getResources().getString(R.string.SUCCESS),
+                            getResources().getString(R.string.module_remove_success_message),
+                            true, AddModuleActivity.this, selectedModule);
+                    alertDialog.show(getSupportFragmentManager(), getResources().getString(
+                            R.string.module_remove_success_tag));
+
+                }
 
             }
 
@@ -316,7 +354,26 @@ public class AddModuleActivity extends AppCompatActivity {
                 }
 
                 // update in database
-                updateModuleConfig(selectedModule);
+                if (updateModuleConfig(selectedModule) == Byte.parseByte(getResources().getString(
+                        R.string.RELOAD_FAILED))) {
+
+                    final MyAlertDialog alertDialog = new MyAlertDialog(
+                            getResources().getString(R.string.ERROR),
+                            getResources().getString(R.string.module_update_failed_message),
+                            false);
+                    alertDialog.show(getSupportFragmentManager(), getResources().getString(
+                            R.string.module_update_failed_tag));
+
+                } else {
+
+                    final MyAlertDialog alertDialog = new MyAlertDialog(
+                            getResources().getString(R.string.SUCCESS),
+                            getResources().getString(R.string.module_update_success_message),
+                            true, AddModuleActivity.this, selectedModule);
+                    alertDialog.show(getSupportFragmentManager(), getResources().getString(
+                            R.string.module_update_success_tag));
+
+                }
 
             }
 
@@ -344,12 +401,12 @@ public class AddModuleActivity extends AppCompatActivity {
     }
 
     /**
-     * Run a thread to generate a default item of this module for the user in the database;
-     * reload the page with this module as default module to set module config and status maps
+     * Run a thread to generate a default item of this module for the user in the database
      *
      * @param moduleName the new module to be added to database
+     * @return           config reloading status
      */
-    private void addNewModule(final String moduleName) {
+    private byte addNewModule(final String moduleName) {
 
         DatabaseHandler handler = new DatabaseHandler(
                 this, getResources().getString(R.string.add_module),
@@ -358,20 +415,21 @@ public class AddModuleActivity extends AppCompatActivity {
         thread.start();
         try {
             thread.join();
-            triggerConfigReload();
+            return triggerConfigReload();
         } catch (InterruptedException e) {
             e.printStackTrace();
+            return Byte.parseByte(getResources().getString(R.string.RELOAD_FAILED));
         }
 
     }
 
     /**
-     * Run a thread to remove the given module for the user in the database;
-     * reload the page with this module as default module to set module config and status maps
+     * Run a thread to remove the given module for the user in the database
      *
      * @param moduleName the module to be removed from database
+     * @return           config reloading status
      */
-    private void removeModule(final String moduleName) {
+    private byte removeModule(final String moduleName) {
 
         DatabaseHandler handler = new DatabaseHandler(
                 this, getResources().getString(R.string.remove_module),
@@ -380,20 +438,21 @@ public class AddModuleActivity extends AppCompatActivity {
         thread.start();
         try {
             thread.join();
-            triggerConfigReload();
+            return triggerConfigReload();
         } catch (InterruptedException e) {
             e.printStackTrace();
+            return Byte.parseByte(getResources().getString(R.string.RELOAD_FAILED));
         }
 
     }
 
     /**
-     * Run a thread to update config of this module for the user in the database;
-     * reload the page with this module as default module to set module config and status maps
+     * Run a thread to update config of this module for the user in the database
      *
      * @param moduleName the new module whose config are to be updated in database
+     * @return           config reloading status
      */
-    private void updateModuleConfig(final String moduleName) {
+    private byte updateModuleConfig(final String moduleName) {
 
         DatabaseHandler handler = new DatabaseHandler(
                 this, getResources().getString(R.string.update_module_config),
@@ -402,9 +461,10 @@ public class AddModuleActivity extends AppCompatActivity {
         thread.start();
         try {
             thread.join();
-            triggerConfigReload();
+            return triggerConfigReload();
         } catch (InterruptedException e) {
             e.printStackTrace();
+            return Byte.parseByte(getResources().getString(R.string.RELOAD_FAILED));
         }
 
     }
@@ -454,8 +514,10 @@ public class AddModuleActivity extends AppCompatActivity {
 
     /**
      * Run a thread to send a trigger message to cloud server with username
+     *
+     * @return config reload status
      */
-    private void triggerConfigReload() {
+    private byte triggerConfigReload() {
 
         ConfigReloadTrigger handler = new ConfigReloadTrigger(this, username);
         Thread thread = new Thread(handler);
@@ -465,6 +527,7 @@ public class AddModuleActivity extends AppCompatActivity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        return handler.isReloadSuccess();
 
     }
 

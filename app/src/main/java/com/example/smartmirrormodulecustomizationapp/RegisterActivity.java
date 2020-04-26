@@ -54,7 +54,8 @@ public class RegisterActivity extends AppCompatActivity {
 
                     MyAlertDialog alertDialog = new MyAlertDialog(
                             getResources().getString(R.string.ERROR),
-                            getResources().getString(R.string.fields_empty_message));
+                            getResources().getString(R.string.fields_empty_message),
+                            false);
                     alertDialog.show(getSupportFragmentManager(),
                             getResources().getString(R.string.fields_empty_tag));
                     return;
@@ -66,7 +67,8 @@ public class RegisterActivity extends AppCompatActivity {
 
                     MyAlertDialog alertDialog = new MyAlertDialog(
                             getResources().getString(R.string.ERROR),
-                            getResources().getString(R.string.username_already_existed_message));
+                            getResources().getString(R.string.username_already_existed_message),
+                            false);
                     alertDialog.show(getSupportFragmentManager(),
                             getResources().getString(R.string.username_already_existed_tag));
                     return;
@@ -78,7 +80,8 @@ public class RegisterActivity extends AppCompatActivity {
 
                     MyAlertDialog alertDialog = new MyAlertDialog(
                             getResources().getString(R.string.ERROR),
-                            getResources().getString(R.string.two_passwords_not_euqal_message));
+                            getResources().getString(R.string.two_passwords_not_euqal_message),
+                            false);
                     alertDialog.show(getSupportFragmentManager(),
                             getResources().getString(R.string.two_passwords_not_euqal_tag));
                     return;

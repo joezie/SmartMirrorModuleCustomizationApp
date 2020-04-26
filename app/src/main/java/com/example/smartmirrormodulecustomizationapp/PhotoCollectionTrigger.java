@@ -119,7 +119,8 @@ public class PhotoCollectionTrigger implements Runnable {
                     final MyAlertDialog alertDialog = new MyAlertDialog(
                             parentActivity.getResources().getString(R.string.SUCCESS),
                             parentActivity.getResources().getString(
-                                    R.string.register_success_message));
+                                    R.string.register_success_message),
+                            false);
                     alertDialog.show(parentActivity.getSupportFragmentManager(),
                             parentActivity.getResources().getString(R.string.register_success_tag));
                     progressText.setText(parentActivity.getResources().getString(
@@ -130,7 +131,8 @@ public class PhotoCollectionTrigger implements Runnable {
                     final MyAlertDialog alertDialog = new MyAlertDialog(
                             parentActivity.getResources().getString(R.string.ERROR),
                             parentActivity.getResources().getString(
-                                    R.string.register_failed_message));
+                                    R.string.register_failed_message),
+                            false);
                     alertDialog.show(parentActivity.getSupportFragmentManager(),
                             parentActivity.getResources().getString(R.string.register_failed_tag));
                     progressText.setText(parentActivity.getResources().getString(

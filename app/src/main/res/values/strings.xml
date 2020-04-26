@@ -97,9 +97,24 @@
     <string name="register_success_tag">REGISTER_SUCCESS</string>
     <string name="register_failed_message">Photo collection failed. Please try again.</string>
     <string name="register_failed_tag">REGISTER_FAILED</string>
+    <string name="module_update_success_message">Update module success!</string>
+    <string name="module_update_success_tag">MODULE_UPDATE_SUCCESS</string>
+    <string name="module_update_failed_message">Update module failed!</string>
+    <string name="module_update_failed_tag">MODULE_UPDATE_FAILED</string>
+    <string name="module_add_success_message">Add module success!</string>
+    <string name="module_add_success_tag">MODULE_ADD_SUCCESS</string>
+    <string name="module_add_failed_message">Add module failed!</string>
+    <string name="module_add_failed_tag">MODULE_ADD_FAILED</string>
+    <string name="module_remove_success_message">Remove module success!</string>
+    <string name="module_remove_success_tag">MODULE_REMOVE_SUCCESS</string>
+    <string name="module_remove_failed_message">Remove module failed!</string>
+    <string name="module_remove_failed_tag">MODULE_REMOVE_FAILED</string>
     <string name="PHOTO_COLLECTION">1</string>
     <string name="REFRESH">2</string>
     <string name="MODULE_UPDATE">1</string>
+    <string name="RELOAD_FAILED">-1</string>
+    <string name="USER_MISMATCHED">0</string>
+    <string name="USER_MATCHED">1</string>
 
 
     <!-- String Arrays -->

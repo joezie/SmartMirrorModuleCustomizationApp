@@ -536,8 +536,7 @@ class DatabaseHandler implements Runnable {
 
     /**
      * Add a default item to corresponding module table with given username and position;
-     * Set corresponding module as enabled in user module table and refresh parent activity
-     * with selected module as default module on success
+     * Set corresponding module as enabled in user module table
      *
      * @param stmt          Used for database connection
      * @throws SQLException If cannot add an item to database for new module
@@ -565,15 +564,6 @@ class DatabaseHandler implements Runnable {
 
             }
 
-            // refresh parent activity with selected module as default module
-            parentActivity.finish();
-            parentActivity.startActivity(parentActivity
-                    .getIntent()
-                    .addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-                    .putExtra(parentActivity
-                            .getResources()
-                            .getString(R.string.default_module), moduleName));
-
         } else {
 
             // throws exception on failure
@@ -585,8 +575,7 @@ class DatabaseHandler implements Runnable {
 
     /**
      * Remove the item of given username and position from the corresponding module table;
-     * Set corresponding module as disabled in user module table and refresh parent activity
-     * with selected module as default module on success
+     * Set corresponding module as disabled in user module table
      *
      * @param stmt          Used for database connection
      * @throws SQLException If cannot remove the item of the chosen module from database
@@ -614,15 +603,6 @@ class DatabaseHandler implements Runnable {
 
             }
 
-            // refresh parent activity with selected module as default module
-            parentActivity.finish();
-            parentActivity.startActivity(parentActivity
-                    .getIntent()
-                    .addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-                    .putExtra(parentActivity
-                            .getResources()
-                            .getString(R.string.default_module), moduleName));
-
         } else {
 
             // throws exception on failure
@@ -633,8 +613,7 @@ class DatabaseHandler implements Runnable {
     }
 
     /**
-     * Update config of the item in corresponding module table with given username and position;
-     * Refresh parent activity with selected module as default module on success
+     * Update config of the item in corresponding module table with given username and position
      *
      * @param stmt          Used for database connection
      * @throws SQLException If cannot update config of given module in database
@@ -684,18 +663,7 @@ class DatabaseHandler implements Runnable {
                 String.format("UPDATE %s SET %s WHERE (username=\"%s\" AND position=%d)",
                         moduleTable, configSetter.toString(), username, position);
 
-        if (stmt.executeUpdate(updateConfigOperation) != 0) {
-
-            // on success, refresh parent activity with selected module as default module
-            parentActivity.finish();
-            parentActivity.startActivity(parentActivity
-                    .getIntent()
-                    .addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-                    .putExtra(parentActivity
-                            .getResources()
-                            .getString(R.string.default_module), moduleName));
-
-        } else {
+        if (stmt.executeUpdate(updateConfigOperation) == 0) {
 
             // throws exception on failure
             throw new IllegalStateException(
