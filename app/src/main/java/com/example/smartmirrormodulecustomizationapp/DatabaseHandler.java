@@ -1,11 +1,13 @@
 package com.example.smartmirrormodulecustomizationapp;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
+import android.util.Base64;
 import android.util.Pair;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -16,6 +18,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+
 
 class DatabaseHandler implements Runnable {
 
@@ -786,7 +792,7 @@ class DatabaseHandler implements Runnable {
         @SuppressLint("DefaultLocale")
         final String matchPasswordQuery = String.format(
                 "SELECT count(*) AS %s FROM %s WHERE username=\"%s\" AND `password`=\"%s\"",
-                matched, userModuleTable, username, loginPassword
+                matched, userModuleTable, username, encryptPassword(loginPassword)
         );
         final ResultSet matchPasswordResult = stmt.executeQuery(matchPasswordQuery);
 
@@ -840,7 +846,7 @@ class DatabaseHandler implements Runnable {
                 .getString(R.string.user_module_table);
         @SuppressLint("DefaultLocale") final String addUserOperation =
                 String.format("INSERT INTO %s (`username`, `password`) VALUES (\"%s\", \"%s\")",
-                        userModuleTable, username, loginPassword);
+                        userModuleTable, username, encryptPassword(loginPassword));
 
         if (stmt.executeUpdate(addUserOperation) == 0) {
 
@@ -877,5 +883,38 @@ class DatabaseHandler implements Runnable {
      * @return Whether or not the username is existed
      */
     boolean isUsernameExisted() { return usernameExisted; }
+
+
+    /**
+     * Encrypt password based on AES algorithm
+     *
+     * @param password password to be encrypted
+     * @return         Encrypted password
+     */
+    private String encryptPassword(final String password) {
+
+        try {
+
+            final String encryptString = parentActivity.getResources()
+                    .getString(R.string.ENCRYPT_KEY);
+            final String encryptAlgo = parentActivity.getResources()
+                    .getString(R.string.ENCRYPT_ALGO);
+            final Key encryptKey = new SecretKeySpec(encryptString.getBytes(), encryptAlgo);
+            final Cipher cipher = Cipher.getInstance(encryptAlgo);
+            cipher.init(Cipher.ENCRYPT_MODE, encryptKey);
+            final byte[] encryptedPassword = cipher.doFinal(
+                    password.getBytes(StandardCharsets.UTF_8));
+            return Base64.encodeToString(encryptedPassword, Base64.DEFAULT);
+
+        } catch(final Exception e) {
+
+            e.printStackTrace();
+
+            // throws exception on failure
+            throw new IllegalStateException("Password encryption failed");
+
+        }
+
+    }
 
 } // End of DatabaseHandler

@@ -6,7 +6,7 @@
     <string name="DATABASE_NAME">smartmirrorschema</string>
     <string name="DATABASE_USERNAME">joezie</string>
     <string name="DATABASE_PASSWORD">yigemima</string>
-    <string name="PI_URL">192.168.137.239</string>
+    <string name="PI_URL">192.168.137.195</string>
     <string name="PI_PORT">2540</string>
     <string name="CLOUD_URL">34.69.18.117</string>
     <string name="CLOUD_PORT">2540</string>
@@ -115,6 +115,8 @@
     <string name="RELOAD_FAILED">-1</string>
     <string name="USER_MISMATCHED">0</string>
     <string name="USER_MATCHED">1</string>
+    <string name="ENCRYPT_KEY">eNCrypTD1YM1RR0R</string>
+    <string name="ENCRYPT_ALGO">AES</string>
 
 
     <!-- String Arrays -->

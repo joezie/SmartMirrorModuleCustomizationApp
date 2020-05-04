@@ -22,7 +22,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- *  Activity for Add Module page, where users can choose the target module through a spinner,
+ *  Activity for Module Update page, where users can choose the target module through a spinner,
  *  edit configurations of the corresponding module
  */
 public class AddModuleActivity extends AppCompatActivity {
